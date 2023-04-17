@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='body'>
     <div class='main'>
       <div class='article'>
         <div class='header'>
@@ -26,26 +26,62 @@
           </div>
         </div>
       </div>
-      <div class='markdown-content'>
-          <mymarked :dompurify="false" :markedOptions="{ breaks: true }" :tocNav="true" :initialValue="html"></mymarked>
-        </div>
-      <div class='left-content'>
-        <div class='nav'>
-        </div>
+      <mymarked :dompurify='false' :markedOptions='{ breaks: true }' :tocNav='true' :initialValue='html'></mymarked>
+      <div ref='comment' :style='wrapStyle' class='comment-wrap'>
+        <Comment
+          v-model='data'
+          :user='currentUser'
+          :before-submit='submit'
+          :before-like='like'
+          :before-delete='deleteComment'
+          :upload-img='uploadImg'
+          :props='commentData'
+        />
       </div>
+    </div>
+    <div class='left-content'>
+      <Recommend></Recommend>
+      <Ad></Ad>
     </div>
   </div>
 </template>
 <script>
 import { Post } from '@/api/index.js'
-import mymarked from './Markdown.vue';
+import mymarked from './Markdown.vue'
+import Ad from '@/layout/home/Ad.vue'
+import Recommend from '@/layout/home/Recommend.vue'
+import Comment from '@/layout/comment/index.vue'
+import { EXAMPLE_DATA } from '../comment/data.js'
+
 export default {
   name: 'Detail',
   components: {
-    mymarked
+    Comment,
+    Recommend,
+    Ad,
+    mymarked,
   },
   props: ['id'],
   data() {
+    const users = [
+      {
+        name: 'Up&Up',
+        avatar: '',
+        author: false,
+      },
+      {
+        name: '我叫白云',
+        avatar: '',
+      },
+      {
+        name: '我叫黑土',
+        avatar: '',
+      },
+      {
+        name: 'NARUTO',
+        avatar: '',
+      },
+    ]
     return {
       PostId: 1,
       tags: [
@@ -56,10 +92,28 @@ export default {
       ],
       readCount: 1238,
       IsFollow: true,
+      IsFollowed: false,
       html: '',//文章内容
+      data: [],
+      commentData: {
+        id: '_id',
+        content: 'content',
+        imgSrc: 'imgSrc',
+        children: 'childrenComments',
+        likes: 'likes',
+        liked: 'liked',
+        reply: 'reply',
+        createAt: 'createAt',
+        user: 'visitor',
+      },
+      currentUser: users[0],
+      users,
+      wrapStyle: '',
     }
   },
   mounted() {
+    // const header = this.$refs.header
+    // this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
   },
   methods: {
     LoadArticle() {
@@ -81,49 +135,104 @@ export default {
         })
       })
 
-    }
+    },
+    async submit(newComment, parent, add) {
+      const res = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ newComment, parent })
+        }, 300)
+      })
+      add(Object.assign(res.newComment, { _id: new Date().getTime() }))
+      console.log('addComment: ', res)
+    },
+    async like(comment) {
+      const res = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(comment)
+        }, 0)
+      })
+      console.log('likeComment: ', res)
+    },
+    async uploadImg({ file, callback }) {
+      const res = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = () => {
+          resolve(reader.result)
+        }
+        reader.onerror = () => {
+          reject(reader.error)
+        }
+      })
+      callback(res)
+      console.log('uploadImg： ', res)
+    },
+    async deleteComment(comment, parent) {
+      const res = await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({ comment, parent })
+        }, 300)
+      })
+      console.log('deleteComment: ', res)
+    },
+    addData(times) {
+      setTimeout(() => {
+        this.data = new Array(times).fill(EXAMPLE_DATA).flat(Infinity)
+      }, 0)
+    },
   },
   created() {
     this.PostId = this.$route.params.id
     this.LoadArticle()
+    this.addData(1)
   },
-  computed: {
-
-  }
+  computed: {},
 }
 </script>
 
 <style lang='scss' scoped>
+.body {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: row;
+}
+
 .main {
   width: 70%;
   height: auto;
-  margin: 0 auto;
+
   .article {
-    width: 80%;
+    width: 75%;
     height: auto;
-    margin-top: 20px;
+    margin: 0 10px 10px 300px;
     background: #fff;
+
     .header {
       width: 100%;
       height: 70px;
       box-shadow: 1px 1px 1px #efeaea;
       display: flex;
       flex-direction: row;
+
       .avatar {
         width: 5%;
         margin-left: 15px;
         margin-top: 15px;
       }
+
       .left {
         width: 55%;
         height: 70px;
         margin-left: 15px;
+
         .author-info {
           width: 100%;
           height: 40px;
           display: flex;
           flex-direction: row;
           padding: 10px;
+
           p {
             width: 25%;
             height: 30px;
@@ -153,6 +262,11 @@ export default {
           }
         }
       }
+
+      .mid {
+        width: 20%;
+      }
+
       .right {
         .follow {
           padding: 15px;
@@ -160,20 +274,17 @@ export default {
       }
     }
   }
-  .markdown-content{
-    margin-top: 10px;
-    width: 80%;
+
+  .comment-wrap {
+    width: 75%;
     height: auto;
+    margin: 0 10px 10px 300px;
     background: #fff;
   }
-  .left-content {
-    width: 30%;
-    height: auto;
-    margin-top: 20px;
-    margin-left: 10px;
-    position: relative;
-  }
+}
 
-
+.left-content {
+  width: 18%;
+  height: auto;
 }
 </style>

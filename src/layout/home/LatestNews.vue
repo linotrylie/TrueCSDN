@@ -29,7 +29,8 @@
       </li>
       <li>
         <span>[<a href='#'>网络工具</a>]</span>
-        <a class='link-dark' href='#' title='Royal TSX 1.4.6 好用的多终端工具'>Royal TSX 1.4.6 好用的多终端工具23412412341234123412341234341234</a>
+        <a class='link-dark' href='#' title='Royal TSX 1.4.6 好用的多终端工具'>Royal TSX 1.4.6
+          好用的多终端工具23412412341234123412341234341234</a>
       </li>
       <li>
         <span>[<a href='#'>网络工具</a>]</span>
@@ -55,29 +56,32 @@ export default {
   max-width: 38%;
   background: #fff;
   text-indent: 1em;
-.latest-news-content-title {
-  height: 30px;
-  font-size: 18px;
-  margin-top: 5px;
-  box-shadow: 1px 1px 1px #efeaea;
-}
 
-.list-unstyled {
-li {
-  overflow: hidden;
-  white-space: normal;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  margin-bottom: 6px;
-}
-li:last-child {
-  margin-bottom: 0;
-}
-li a:hover {
-  color: #4e81f6;
-}
-}
+  .latest-news-content-title {
+    height: 30px;
+    font-size: 18px;
+    margin-top: 5px;
+    box-shadow: 1px 1px 1px #efeaea;
+  }
+
+  .list-unstyled {
+    li {
+      overflow: hidden;
+      white-space: normal;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      margin-bottom: 6px;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+
+    li a:hover {
+      color: #4e81f6;
+    }
+  }
 }
 </style>

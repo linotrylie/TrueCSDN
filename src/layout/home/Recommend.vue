@@ -58,48 +58,54 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .recommend {
-    width: 100%;
-    height: 310px;
-    background: #fff;
-    margin-top: 15px;
-    .title {
-      font-size: 18px;
-      height: 35px;
-      line-height: 35px;
-      box-shadow: 1px 1px 1px #efeaea;
-      margin-bottom: 5px;
-      display: flex;
-      justify-content: space-around;
-      p {
-        width: 50%;
-      }
-      .more {
-        font-size: 10px;
-        display: inline-block;
-      }
-      .more:hover {
-        color: #4e81f6;
-      }
+.recommend {
+  width: 100%;
+  height: 310px;
+  background: #fff;
+  margin-top: 15px;
+
+  .title {
+    font-size: 18px;
+    height: 35px;
+    line-height: 35px;
+    box-shadow: 1px 1px 1px #efeaea;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-around;
+
+    p {
+      width: 50%;
     }
 
-    .list-unstyled {
-      li {
-        text-indent: 1em;
-        overflow: hidden;
-        white-space: normal;
-        word-break: break-word;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        margin-bottom: 6px;
-      }
-      li:last-child {
-        margin-bottom: 0px;
-      }
-      li a:hover {
-        color: #4e81f6;
-      }
+    .more {
+      font-size: 10px;
+      display: inline-block;
+    }
+
+    .more:hover {
+      color: #4e81f6;
     }
   }
+
+  .list-unstyled {
+    li {
+      text-indent: 1em;
+      overflow: hidden;
+      white-space: normal;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      margin-bottom: 6px;
+    }
+
+    li:last-child {
+      margin-bottom: 0px;
+    }
+
+    li a:hover {
+      color: #4e81f6;
+    }
+  }
+}
 </style>

@@ -24,14 +24,15 @@ import Article from '@/layout/home/Article.vue'
 import Notice from '@/layout/home/Notice.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
+
 export default {
-  components:{
+  components: {
     Recommend,
     Ad,
     Notice,
     Banner,
     LatestNews,
-    Article
+    Article,
   },
   name: 'home',
 }
@@ -42,23 +43,27 @@ export default {
   width: 60%;
   height: auto;
   margin: 0 auto;
+
   .header-main-content {
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: row;
   }
+
   .mid-main-content {
     width: 100%;
     height: auto;
     margin-top: 18px;
     display: flex;
     flex-direction: row;
+
     .left-main-content {
       width: 70%;
       height: auto;
       margin-right: 2%;
     }
+
     .right-main-content {
       width: 28%;
       height: auto;

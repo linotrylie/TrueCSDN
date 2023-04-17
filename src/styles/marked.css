@@ -4,12 +4,11 @@
 /* 代码区 */
 
 .write {
-    margin: 0 auto;
+    /*margin: 0 auto;*/
 	color: #636b6f;
     text-indent: 1em;
     letter-spacing: .05em;
     line-height: 1.5em;
-    /* max-width: 100vw; */
 }
 
 .write h1,h2,h3,h4 {
@@ -167,15 +166,14 @@
 .write>h4.md-focus:before {
     width: auto;
     height: auto;
-    background-color: var(--main-5);
-    color: var(--mid-1);
+    background-color: #4e81f6;
+    color: #f7f7f7;
 }
 
 .code-block {
     position: relative;
-    padding: 0 !important;
     margin: 10px 0;
-    
+    width: 100%;
     min-height: 36px;
 }
 
@@ -208,7 +206,6 @@
 .write pre {
     border-top: 32px solid #ecf5ff;
     border-radius: 6px;
-    
 	box-shadow: .5px .5px 4px 0px #0000002e;
 	margin:5px;
 }

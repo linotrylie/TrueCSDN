@@ -9,7 +9,8 @@ import mavonEditor from 'mavon-editor'
 import VueDOMPurifyHTML from 'vue-dompurify-html'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' //样式文件
-
+import cookies from 'vue-cookies'
+Vue.prototype.$cookies = cookies
 // 高亮语法
 Vue.config.productionTip = false // 设置为 false 以阻止 Vue 在启动时生成生产提示
 Vue.directive('highlight',function (el) {

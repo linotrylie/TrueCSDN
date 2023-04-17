@@ -25,7 +25,8 @@ export default {
 <style lang='scss' scoped>
 .title {
   min-height: 200px;
-  background:#fff;
+  background: #fff;
+
   p {
     font-size: 18px;
     font-weight: 500;
@@ -33,13 +34,16 @@ export default {
     text-align: center;
     height: 30px;
   }
+
   .content {
-    margin-top:5px;
-    height:auto;
-    text-indent:1em;
+    margin-top: 5px;
+    height: auto;
+    text-indent: 1em;
+
     ::v-deep a {
       color: #4e81f6;
     }
+
     ::v-deep a:hover {
       color: #4670de;
     }

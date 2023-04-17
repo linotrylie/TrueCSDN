@@ -8,53 +8,55 @@
         <router-view></router-view>
       </el-main>
       <!-- <el-footer> -->
-        <!-- <Footer></Footer> -->
+      <!-- <Footer></Footer> -->
       <!-- </el-footer> -->
     </el-container>
   </div>
 </template>
 
 <script>
-import  Header from './common/Header.vue'
+import Header from './common/Header.vue'
 import Footer from './common/Footer.vue'
 import MainContent from './common/MainContent.vue'
+
 export default {
   name: 'Layout',
   components: {
     Header,
     Footer,
-    MainContent
+    MainContent,
   },
   data() {
     return {}
   },
-  methods: {
-
-  },
+  methods: {},
   mounted() {
 
   },
 }
 </script>
 
-<style lang="scss" scoped>
-  .layout {
+<style lang='scss' scoped>
+.layout {
+  width: 100%;
+  height: 100%;
+
+  .el-container {
     width: 100%;
     height: 100%;
-    .el-container{
+
+    .el-header {
       width: 100%;
-      height: 100%;
-      .el-header {
-        width: 100%;
-        padding: 0 !important;
-        background: #fff;
-        height: 80px !important;
-        position: fixed;
-      }
-      .el-main {
-        margin-top: 80px;
-      }
+      padding: 0 !important;
+      background: #fff;
+      height: 80px !important;
+      position: fixed;
+    }
+
+    .el-main {
+      margin-top: 80px;
     }
   }
+}
 
 </style>
