@@ -321,7 +321,7 @@ export default {
 
     .rich-input {
       border-radius: 3px;
-      border: 1px solid #f1f1f1;
+      border: 1px solid #1a1616;
       background-color: #fff;
       overflow: hidden;
 
@@ -331,7 +331,6 @@ export default {
 
       .grow-wrap {
         display: grid;
-
         &::after {
           content: attr(data-replicated-value) ' ';
           white-space: pre-wrap;

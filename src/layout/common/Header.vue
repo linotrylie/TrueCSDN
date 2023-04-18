@@ -16,12 +16,12 @@
                     </template>
                     <el-menu-item v-for='(child , cindex) in item.children' :index='child.path'
                                   :key="index + '-' + cindex"
-                                  v-if='child.isHidden'>{{ child.name }}
+                                  v-if='!child.isHidden'>{{ child.name }}
                     </el-menu-item>
                   </el-submenu>
                 </template>
                 <template v-else>
-                  <el-menu-item :index='item.path' :key='index' v-if='item.isHidden'>{{ item.name }}</el-menu-item>
+                  <el-menu-item :index='item.path' :key='index' v-if='!item.isHidden'>{{ item.name }}</el-menu-item>
                 </template>
               </template>
             </el-menu>
@@ -36,16 +36,23 @@
         </el-col>
         <el-col :span='4'>
           <div class='avatar-nav'>
-            <el-avatar :size='50' :src='circleUrl'></el-avatar>
+            <router-link to='/login' v-show='isLogin'>
+              <el-avatar :size='50' :src='circleUrl'></el-avatar>
+            </router-link>
+            <router-link :to="{name:'usercenter',params:{userId:userid}}" v-show='!isLogin'>
+              <el-avatar :size='50' :src='userSrc'></el-avatar>
+            </router-link>
           </div>
         </el-col>
       </el-row>
-
     </div>
   </div>
 </template>
 
 <script>
+import {getToken} from '@/utils/auth.js'
+import router from '@/router/index.js'
+
 export default {
   name: 'Header',
   data() {
@@ -53,18 +60,26 @@ export default {
       activeIndex: '1',
       keyword: '',
       circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+      userSrc:'https://pic.code-nav.cn/post_cover/1601072287388278786/MOfhTNjO-%E4%B8%93%E6%A0%8F%E5%9B%BE%E7%89%87.jpeg',
       menus: [],
+      isLogin:true,
+      userid:12
     }
   },
   methods: {
     handleSelect(key, keyPath) {
     },
+    handleUser() {
+
+    }
   },
   mounted() {
 
   },
   created() {
     this.menus = [...this.$router.options.routes]
+    let token = getToken();
+    this.isLogin = !(token === null || token === '');
   },
 }
 </script>

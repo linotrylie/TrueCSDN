@@ -9,8 +9,11 @@ import mavonEditor from 'mavon-editor'
 import VueDOMPurifyHTML from 'vue-dompurify-html'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/googlecode.css' //样式文件
+import VueClipboards from 'vue-clipboard2'
 import cookies from 'vue-cookies'
+import request from '@/utils/request.js'
 Vue.prototype.$cookies = cookies
+Vue.prototype.request = request
 // 高亮语法
 Vue.config.productionTip = false // 设置为 false 以阻止 Vue 在启动时生成生产提示
 Vue.directive('highlight',function (el) {
@@ -19,9 +22,10 @@ Vue.directive('highlight',function (el) {
     hljs.highlightBlock(block)
   })
 })
-Vue.use(VueDOMPurifyHTML)
-Vue.use(ElementUI)
-Vue.use(mavonEditor)
+Vue.use(VueClipboards); //复制插件
+Vue.use(VueDOMPurifyHTML);//markdown文本过滤
+Vue.use(ElementUI);//elementUI
+Vue.use(mavonEditor);//编辑器
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this // 启用全局事件总线功能

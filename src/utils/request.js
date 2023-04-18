@@ -1,5 +1,6 @@
 import axios from 'axios'
 import NProgress from 'nprogress'
+import { getToken } from '@/utils/auth.js'
 
 // 通用请求配置
 const request = axios.create({
@@ -11,6 +12,11 @@ const request = axios.create({
 request.interceptors.request.use(
   config => {
     // 1、请求发送之前的时候做点儿什么
+    // if(config.url.indexOf('login') > 0) {
+    //
+    // }else{
+    //   config.headers['Authorization'] = getToken();
+    // }
     NProgress.start()
     return config
   },

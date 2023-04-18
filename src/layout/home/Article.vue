@@ -2,7 +2,7 @@
   <div class='article'>
     <div class='tag'>
       <el-tabs v-model='ActiveName' type='border-card' @tab-click='handleClick'>
-        <el-tab-pane v-for='(item,index) in Tabitems' :label='item.label' :name='item.name'>
+        <el-tab-pane v-for='(item,index) in Tabitems' :label='item.label' :name='item.name' :key='index'>
         </el-tab-pane>
       </el-tabs>
       <div v-infinite-scroll='load' class='article-content'>

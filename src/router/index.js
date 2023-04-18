@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/layout/home/home.vue'
+import Login from '@/layout/auth/Login.vue'
 import ArticleDetail from '@/layout/article/Detail.vue'
 Vue.use(VueRouter)
 
@@ -15,42 +16,42 @@ const routes = [
   {
     path: '/home',
     index:2,
-    isHidden:true,
+    isHidden:false,
     name:'首页2',
     component: Home,
   },
   {
     path: '/home',
     index:3,
-    isHidden:true,
+    isHidden:false,
     name:'首页3',
     component: Home,
   },
   {
     path: '/home',
     index:4,
-    isHidden:true,
+    isHidden:false,
     name:'首页4',
     component: Home,
     children:[
       {
         path: '/home',
         index:1,
-        isHidden:true,
+        isHidden:false,
         name:'首页5',
         component: Home,
       },
       {
         path: '/home',
         index:2,
-        isHidden:true,
+        isHidden:false,
         name:'首页6',
         component: Home,
       },
       {
         path: '/home',
         index:3,
-        isHidden:true,
+        isHidden:false,
         name:'首页7',
         component: Home,
       },
@@ -59,16 +60,23 @@ const routes = [
   {
     path: '/home',
     index:5,
-    isHidden:true,
+    isHidden:false,
     name:'首页5',
     component: Home,
   },
   {
     path: '/article/detail/:id',
     index:6,
-    isHidden:false,
+    isHidden:true,
     name:'文章详情',
     component: ArticleDetail,
+  },
+  {
+    path: '/login',
+    index:7,
+    isHidden:true,
+    name:'登录',
+    component: Login,
   },
 ]
 

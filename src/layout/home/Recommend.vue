@@ -2,7 +2,7 @@
   <div>
     <div class='recommend'>
       <div class='title'>
-        <p>最新推荐</p>
+        <p>{{title}}</p>
         <a href='#' class='more'>查看更多</a>
       </div>
       <ul class='list-unstyled'>
@@ -53,7 +53,28 @@
 
 <script>
 export default {
+  props:['type'],
   name: 'Recommend',
+  data() {
+    return {
+      title:''
+    }
+  },
+  mounted() {
+
+  },
+  methods : {
+    loadRecommand() {
+      if(this.type === 'news') {
+        this.title = '最新推荐'
+      } else if(this.type === 'download') {
+        this.title = '下载榜单'
+      }
+    }
+  },
+  created() {
+    this.loadRecommand();
+  }
 }
 </script>
 
@@ -100,7 +121,7 @@ export default {
     }
 
     li:last-child {
-      margin-bottom: 0px;
+      margin-bottom: 0;
     }
 
     li a:hover {

@@ -11,7 +11,7 @@
               <p>
                 <router-link to='/home'>Linotrylie1234123412341324</router-link>
               </p>
-              <el-tag v-for='item in tags' :color='item.color' :type='item.type'>{{ item.name }}</el-tag>
+              <el-tag v-for='(item,index) in tags' :color='item.color' :type='item.type' :key='index' >{{ item.name }}</el-tag>
             </div>
             <div class='article-info'>
               <p>2023-4-16 20:05:30&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;阅读 {{ readCount }}</p>
@@ -26,23 +26,81 @@
           </div>
         </div>
       </div>
-      <mymarked :dompurify='false' :markedOptions='{ breaks: true }' :tocNav='true' :initialValue='html'></mymarked>
+
+      <mymarked :dompurify='false' :initialValue='html' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
+      <div class='interaction'>
+        <div class='like'>
+          <el-button
+            icon='el-icon-sunrise-1'
+            size='medium'
+            style='font-size: 16px;padding: 4px 8px;'
+            title='点赞'
+            @click='likeArticle()'></el-button>
+        </div>
+        <div class='collect'>
+          <el-button
+            icon='el-icon-folder-checked'
+            size='medium'
+            style='font-size: 16px;padding: 4px 8px;'
+            title='收藏'
+            @click='collectArticle()'></el-button>
+        </div>
+        <div class='share'>
+          <el-button
+            icon='el-icon-share'
+            size='medium'
+            style='font-size: 16px;padding: 4px 8px;'
+            title='共享'
+            @click='shareArticle()'></el-button>
+        </div>
+        <div class='report'>
+          <el-dropdown @command="handleDropdown">
+            <el-button>
+              更多<i class='el-icon-arrow-down el-icon--right'></i>
+            </el-button>
+            <el-dropdown-menu slot='dropdown'>
+              <el-dropdown-item  command='repo'>举报</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+      </div>
       <div ref='comment' :style='wrapStyle' class='comment-wrap'>
         <Comment
           v-model='data'
-          :user='currentUser'
-          :before-submit='submit'
-          :before-like='like'
           :before-delete='deleteComment'
-          :upload-img='uploadImg'
+          :before-like='like'
+          :before-submit='submit'
           :props='commentData'
+          :upload-img='uploadImg'
+          :user='currentUser'
         />
       </div>
     </div>
     <div class='left-content'>
-      <Recommend></Recommend>
+      <Download :downloadList='downloadList' v-show='downloadList.length > 0'></Download>
+      <Recommend type='news'></Recommend>
+      <Recommend type='download'></Recommend>
       <Ad></Ad>
     </div>
+    <el-dialog title="举报" :visible.sync="dialogFormVisible">
+      <el-form :model="repo">
+        <el-form-item label="举报内容" >
+          <el-input v-model="repo.content" autocomplete="off" type="textarea"></el-input>
+        </el-form-item>
+        <el-form-item label="举报类型">
+          <el-select v-model="repo.type" placeholder="请选择活动区域">
+            <el-option label="色情暴力" value="色情暴力"></el-option>
+            <el-option label="版权侵害" value="版权侵害"></el-option>
+            <el-option label="质量极差" value="质量极差"></el-option>
+            <el-option label="违规推广未知广告" value="违规推广未知广告"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSubmitRepo">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -52,10 +110,14 @@ import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
 import Comment from '@/layout/comment/index.vue'
 import { EXAMPLE_DATA } from '../comment/data.js'
+import { Notification } from 'element-ui'
+import { CONSTANT } from '@/config/constant.js'
+import Download from '@/layout/article/Download.vue'
 
 export default {
   name: 'Detail',
   components: {
+    Download,
     Comment,
     Recommend,
     Ad,
@@ -90,10 +152,16 @@ export default {
         { name: '大师', type: 'success', color: '#fff' },
         { name: 'Coder', type: 'success', color: '#fff' },
       ],
+      dialogFormVisible: false,
+      repo:{
+        content:'',
+        type:''
+      },
       readCount: 1238,
       IsFollow: true,
       IsFollowed: false,
       html: '',//文章内容
+      title: '',//文章标题
       data: [],
       commentData: {
         id: '_id',
@@ -109,6 +177,24 @@ export default {
       currentUser: users[0],
       users,
       wrapStyle: '',
+      downloadList: [
+        {
+          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
+          title: '百度网盘',
+        },
+        {
+          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
+          title: '本地下载',
+        },
+        {
+          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
+          title: '阿里云盘',
+        },
+        {
+          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
+          title: '江苏电信',
+        },
+      ],
     }
   },
   mounted() {
@@ -125,7 +211,12 @@ export default {
         sortOrder: 'descend',
       }
       Post(url, postData).then(res => {
-        this.html = res.data.records[4].content
+        this.html = res.data.records[5].content
+        if (res.data.records[5].title === null) {
+          this.title = res.data.records[5].tags.join('')
+        } else {
+          this.title = res.data.records[5].title
+        }
 
       }).catch(err => {
         console.log(err)
@@ -180,6 +271,36 @@ export default {
         this.data = new Array(times).fill(EXAMPLE_DATA).flat(Infinity)
       }, 0)
     },
+    shareArticle(val) {
+      let that = this
+      let message = '我在' + CONSTANT.APPNAME + '发现了『 ' + that.title + ' 』💎 快来看看 ' + window.location.href
+      this.$copyText(message).then(function(e) {
+        Notification.success({
+          title: '复制成功，快去分享吧',
+          message: '复制成功，快去分享吧',
+        })
+      }).catch(err => {
+        Notification.error({
+          title: '浏览器不支持该功能',
+          message: '请使用最新浏览器',
+        })
+      })
+    },
+    likeArticle() {
+
+    },
+    collectArticle() {
+
+    },
+    handleDropdown(command) {
+      if(command === 'repo') {
+        this.dialogFormVisible = true;
+      }
+    },
+    handleSubmitRepo() {
+      console.log(this.repo);
+      this.dialogFormVisible =false;
+    }
   },
   created() {
     this.PostId = this.$route.params.id
@@ -275,6 +396,29 @@ export default {
     }
   }
 
+  .interaction {
+    width: 75%;
+    height: 100px;
+    margin: 0 10px 10px 300px;
+    background: #fff;
+    display: flex;
+    flex-direction: row;
+
+    .share,.like,.report,.collect {
+      width: 25%;
+      height: 100px;
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      .el-button {
+        margin: auto;
+      }
+      .el-dropdown {
+        margin: auto;
+      }
+    }
+  }
+
   .comment-wrap {
     width: 75%;
     height: auto;
@@ -284,7 +428,7 @@ export default {
 }
 
 .left-content {
-  width: 18%;
+  width: 18% !important;
   height: auto;
 }
 </style>

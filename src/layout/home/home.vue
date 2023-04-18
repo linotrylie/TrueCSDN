@@ -11,7 +11,8 @@
       <div class='right-main-content'>
         <Notice></Notice>
         <Ad></Ad>
-        <Recommend></Recommend>
+        <Recommend type='news'></Recommend>
+        <Recommend type='download'></Recommend>
       </div>
     </div>
   </div>
@@ -35,6 +36,16 @@ export default {
     Article,
   },
   name: 'home',
+  data() {
+    return {
+
+    }
+  },
+  mounted() {
+
+  },
+  created() {
+  }
 }
 </script>
 

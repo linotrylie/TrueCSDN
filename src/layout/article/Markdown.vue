@@ -36,6 +36,7 @@ import { Post } from '@/api/index.js'
 import hljs from 'highlight.js'
 import { Notification } from 'element-ui'
 import '@/styles/marked.css'
+import { CONSTANT } from '@/config/constant.js'
 
 let rendererMD = new marked.Renderer()
 const TAG_NAME = 'demo-mobai'
@@ -278,23 +279,37 @@ export default {
     this.translateMarkdown()
   },
   methods: {
-    LoadArticle() {
-      let url = 'https://www.code-nav.cn/api/post/list/page/vo'
-      let postData = {
-        current: 1,
-        reviewStatus: 1,
-        sortField: 'createTime',
-        sortOrder: 'descend',
-      }
-      Post(url, postData).then(res => {
-        this.initialValue = res.data.records[5].content
-      }).catch(err => {
-        console.log(err)
-        this.$message({
-          message: '警告哦，这是一条警告消息',
-          type: 'warning',
+    // LoadArticle() {
+    //   let url = 'https://www.code-nav.cn/api/post/list/page/vo'
+    //   let postData = {
+    //     current: 1,
+    //     reviewStatus: 1,
+    //     sortField: 'createTime',
+    //     sortOrder: 'descend',
+    //   }
+    //   Post(url, postData).then(res => {
+    //     this.initialValue = res.data.records[5].content
+    //   }).catch(err => {
+    //     console.log(err)
+    //     this.$message({
+    //       message: '警告哦，这是一条警告消息',
+    //       type: 'warning',
+    //     })
+    //   })
+    // },
+    share(val) {
+      let message = val;
+      this.$copyText(message).then(function(e){
+        Notification.success({
+          title: '复制成功，快去分享吧',
+          message: '复制成功，快去分享吧',
         })
-      })
+      }).catch( err => {
+        Notification.error({
+          title: '浏览器不支持该功能',
+          message: '请使用最新浏览器',
+        })
+      });
     },
     translateMarkdown() {
       let that = this
@@ -340,7 +355,6 @@ export default {
       if (that.tocNav) {
         rendererMD.heading = function(text, level, raw) {
           if (level > 4) return `<h${level}>${text}</h${level}>`
-          // const anchor = tocify.add(text, level);
           if (level < that.maxTitle) {
             that.maxTitle = level
           }
@@ -355,7 +369,6 @@ export default {
           return `<h${level} id='toc-nav${anchor}'>${text}</h${level}>`
         }
       }
-      // customElements.define(TAG_NAME, Demobox)
       let html = marked(this.initialValue, {
         sanitize: false,
         renderer: rendererMD,
@@ -413,7 +426,7 @@ export default {
     },
   },
   created() {
-    this.LoadArticle()
+    // this.LoadArticle()
   },
   destroyed() {
     window.removeEventListener('scroll', this.scroll, false)

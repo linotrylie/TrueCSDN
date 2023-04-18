@@ -28,7 +28,7 @@ export default {
 .ad {
   margin-top: 15px;
   background: #fff;
-  height:28vh;
+  height:280px;
   margin-bottom: 10px;
 
   .el-carousel {

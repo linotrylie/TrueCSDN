@@ -24,6 +24,7 @@
     "mavon-editor": "^2.10.4",
     "nprogress": "^0.2.0",
     "vue": "^2.7.14",
+    "vue-clipboard2": "^0.3.3",
     "vue-cookies": "^1.8.3",
     "vue-dompurify-html": "^4.0.0",
     "vue-markdown": "^2.2.4",
