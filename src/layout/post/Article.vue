@@ -5,6 +5,15 @@
         <el-tab-pane v-for='(item,index) in Tabitems' :label='item.label' :name='item.name' :key='index'>
         </el-tab-pane>
       </el-tabs>
+      <div class='filter'>
+        <span>筛选：</span>
+        <el-radio-group v-model="radio" @change='changeRadio'>
+          <el-radio :label="3">点赞数</el-radio>
+          <el-radio :label="6">收藏数</el-radio>
+          <el-radio :label="9">评论数</el-radio>
+          <el-radio :label="12">下载数</el-radio>
+        </el-radio-group>
+      </div>
       <div v-infinite-scroll='load' class='article-content'>
         <div v-for='item in count' class='article-content-item'>
           <div v-if="src1 === ''" class='article-content-item-image'>
@@ -139,6 +148,7 @@ export default {
       src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
       src1: '1',
       count: 10,
+      radio:1
     }
   },
   methods: {
@@ -148,6 +158,9 @@ export default {
     load() {
       this.count += 1
     },
+    changeRadio(val) {
+      console.log(val)
+    }
   },
   created() {
     console.log(this.Tabitems[0].name)
@@ -181,6 +194,12 @@ export default {
       ::v-deep .el-tabs__content {
         padding: 0 !important;
       }
+    }
+
+    .filter {
+      width: 100%;
+      height: auto;
+      margin-top: 5px;
     }
   }
 

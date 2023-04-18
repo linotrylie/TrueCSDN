@@ -1,7 +1,6 @@
 <template>
   <div class='latest-news-content'>
     <div class='latest-news-content-title'>最热文章</div>
-    <br />
     <ul class='list-unstyled'>
       <li>
         <span>[<a href='#'>智能设备</a>]</span>
@@ -61,6 +60,7 @@ export default {
     height: 30px;
     font-size: 18px;
     margin-top: 5px;
+    margin-bottom: 10px;
     box-shadow: 1px 1px 1px #efeaea;
   }
 

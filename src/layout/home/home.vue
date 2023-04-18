@@ -21,7 +21,7 @@
 <script>
 import Banner from '@/layout/home/Banner.vue'
 import LatestNews from '@/layout/home/LatestNews.vue'
-import Article from '@/layout/home/Article.vue'
+import Article from '@/layout/post/Article.vue'
 import Notice from '@/layout/home/Notice.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'

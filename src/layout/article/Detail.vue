@@ -108,11 +108,11 @@ import { Post } from '@/api/index.js'
 import mymarked from './Markdown.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
+import Download from '@/layout/article/Download.vue'
 import Comment from '@/layout/comment/index.vue'
 import { EXAMPLE_DATA } from '../comment/data.js'
 import { Notification } from 'element-ui'
 import { CONSTANT } from '@/config/constant.js'
-import Download from '@/layout/article/Download.vue'
 
 export default {
   name: 'Detail',

@@ -39,7 +39,7 @@
             <router-link to='/login' v-show='isLogin'>
               <el-avatar :size='50' :src='circleUrl'></el-avatar>
             </router-link>
-            <router-link :to="{name:'usercenter',params:{userId:userid}}" v-show='!isLogin'>
+            <router-link :to="{name:'user-center',query:{id:userid}}" v-show='!isLogin'>
               <el-avatar :size='50' :src='userSrc'></el-avatar>
             </router-link>
           </div>

@@ -11,7 +11,9 @@ export default defineConfig(({ command, mode }) => {
   return {
     base: './',
 
-    plugins: [vue()],
+    plugins: [
+      vue(),
+    ],
 
     resolve: {
       alias: {
