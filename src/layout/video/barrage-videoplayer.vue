@@ -51,7 +51,7 @@
       </div>
       <!-- 暂停的大图标 -->
       <div class="player-paused-state">
-        <svg-icon v-show="!isPlaying" icon-class="icon-pause-large" style="width: 3em; height: 2.2em" />
+        <svg-icon v-show="!isPlaying" name="icon-pause-large" style="width: 3em; height: 2.2em" />
       </div>
       <div class="player-controls" :class="{'cursor-lasting-static': isCursorStatic}">
         <div class="player-progress-bar">
@@ -69,8 +69,8 @@
           <div class="player-controls-bottom-left">
             <!-- 播放与暂停按钮 -->
             <div class="player-controls-btn cursor-pointer" @click="togglePlayStatus">
-              <svg-icon v-show="!isPlaying" icon-class="icon-play" class-name="player-controls-icon" />
-              <svg-icon v-show="isPlaying" icon-class="icon-pause" class-name="player-controls-icon" />
+              <svg-icon v-show="!isPlaying" name="icon-play"  />
+              <svg-icon v-show="isPlaying" name="icon-pause"  />
             </div>
             <div class="time-label">
               {{ currentTimeLabel }} / <span class="fulltime">{{ fullTimeLabel }}</span>
@@ -80,8 +80,8 @@
             <!-- 弹幕开关按钮 -->
             <div class="player-controls-btn" v-if="biBarrageXml != null" @click="toggleShowBarrage">
               <div class="cursor-pointer">
-                <svg-icon v-show="isShowBarrage" icon-class="icon-danmaku-enable" class-name="player-controls-icon" />
-                <svg-icon v-show="!isShowBarrage" icon-class="icon-danmaku-disable" class-name="player-controls-icon" />
+                <svg-icon v-show="isShowBarrage" name="icon-danmaku-enable"  />
+                <svg-icon v-show="!isShowBarrage" name="icon-danmaku-disable"  />
                 <div
                   class="player-controls-btn-hint"
                 >{{isShowBarrage ? '关闭弹幕' : '开启弹幕'}}</div>
@@ -105,9 +105,9 @@
             <div class="player-controls-btn btn-volume">
               <!-- 音量按钮 -->
               <div class="cursor-pointer" @click="toggleMute">
-                <svg-icon v-if="volumePercent > 50" icon-class="icon-volume-full" class-name="player-controls-icon" />
-                <svg-icon v-else-if="volumePercent == 0" icon-class="icon-volume-mute" class-name="player-controls-icon" />
-                <svg-icon v-else icon-class="icon-volume-low" class-name="player-controls-icon" />
+                <svg-icon v-if="volumePercent > 50" name="icon-volume-full"  />
+                <svg-icon v-else-if="volumePercent === 0" name="icon-volume-mute"  />
+                <svg-icon v-else name="icon-volume-low"  />
               </div>
               <!-- 音量条 -->
               <div class="volume-control">
@@ -124,24 +124,24 @@
             </div>
             <!-- 画中画按钮 -->
             <div v-if="pictureInPictureEnabled" class="player-controls-btn cursor-pointer" @click="togglePictureInPicture">
-              <svg-icon v-if="isPictureInPicture" icon-class="icon-picture-in-picture-exit" class-name="player-controls-icon" />
-              <svg-icon v-else icon-class="icon-picture-in-picture" class-name="player-controls-icon" />
+              <svg-icon v-if="isPictureInPicture" name="icon-picture-in-picture-exit" />
+              <svg-icon v-else name="icon-picture-in-picture"  />
               <div
                 class="player-controls-btn-hint"
               >{{isPictureInPicture ? '关闭画中画' : '开启画中画'}}</div>
             </div>
             <!-- 网页全屏开关按钮 -->
             <div class="player-controls-btn cursor-pointer" @click="togglePageFullscreen">
-              <svg-icon v-if="isPageFullscreen" icon-class="icon-page-fullscreen-exit" class-name="player-controls-icon" />
-              <svg-icon v-else icon-class="icon-page-fullscreen" class-name="player-controls-icon" />
+              <svg-icon v-if="isPageFullscreen" name="icon-page-fullscreen-exit" />
+              <svg-icon v-else name="icon-page-fullscreen" />
               <div
                 class="player-controls-btn-hint"
               >{{isPageFullscreen ? '退出网页全屏' : '网页全屏'}}</div>
             </div>
             <!-- 全屏开关按钮 -->
             <div class="player-controls-btn cursor-pointer" @click="toggleFullScreen">
-              <svg-icon v-if="isFullscreen" icon-class="icon-fullscreen-exit" class-name="player-controls-icon" />
-              <svg-icon v-else icon-class="icon-fullscreen" class-name="player-controls-icon" />
+              <svg-icon v-if="isFullscreen" name="icon-fullscreen-exit" />
+              <svg-icon v-else name="icon-fullscreen" />
               <div class="player-controls-btn-hint btn-fullscreen-hint">
                 {{isFullscreen ? '退出全屏' : '进入全屏'}}
               </div>
@@ -157,7 +157,8 @@
 import VolumeBar from "./volume-bar.vue";
 import ProgressBar from "./progress-bar.vue";
 import PlayerBarrageScreen from "./player-barrage-screen.vue";
-import '@/assets/icons'; // icon
+
+// import '@/assets/icons/index.js'; // icon
 
 export default {
   name: "barrage-videoplayer",

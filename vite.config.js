@@ -2,17 +2,21 @@ import { resolve } from 'path' // path 模块提供了一些工具函数，用�
 import { defineConfig, loadEnv } from 'vite' // 使用 defineConfig 工具函数，这样不用 jsdoc 注解也可以获取类型提示
 import vue from '@vitejs/plugin-vue2' // 提供对 Vue 2 的单文件组件支持
 import autoprefixer from 'autoprefixer' // 自动补全 CSS 浏览器前缀，以兼容旧浏览器
-
+import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 export default defineConfig(({ command, mode }) => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件
   // 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀
   const env = loadEnv(mode, process.cwd(), '')
-
+  // const path = require('path');
   return {
     base: './',
 
     plugins: [
       vue(),
+      createSvgIconsPlugin({
+        iconDirs: [resolve(process.cwd(), "src/assets/icons/svg/")], // svg文件位置
+        symbolId: "[name]"
+      })
     ],
 
     resolve: {
@@ -52,6 +56,9 @@ export default defineConfig(({ command, mode }) => {
           drop_debugger: true, // 正式环境移除 debugger
         },
       },
+      commonjsOptions: {
+        transformMixedEsModules: true
+      }
     },
   }
 })

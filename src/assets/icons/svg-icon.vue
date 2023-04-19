@@ -1,54 +1,38 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true" v-on="$listeners">
-    <use :xlink:href="iconName" style="fill: inherit!important" />
+  <svg class="svg-icon" :width="width" :height="height" aria-hidden="true">
+    <use :xlink:href="iconName"></use>
   </svg>
 </template>
 
 <script>
 export default {
-  name: "SvgIcon",
+  name: "svg-icon",
   props: {
-    iconClass: {
+    name: {
       type: String,
-      required: true,
+      required: true
     },
-    className: {
-      type: String,
-      default: "",
+    width: {
+      type: [String, Number],
+      default: 24
     },
+    height: {
+      type: [String, Number],
+      default: 24
+    }
   },
   computed: {
     iconName() {
-      return `#${this.iconClass}`;
-    },
-    svgClass() {
-      if (this.className) {
-        return "svg-icon " + this.className;
-      } else {
-        return "svg-icon";
-      }
-    },
-    styleExternalIcon() {
-      return {
-        mask: `url(${this.iconClass}) no-repeat 50% 50%`,
-        "-webkit-mask": `url(${this.iconClass}) no-repeat 50% 50%`,
-      };
-    },
-  },
+      // return `#icon-${this.name}`;
+      return `#${this.name}`;
+    }
+  }
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .svg-icon {
-   width: 1.5em;
-  height: 1.5em;
-  /* vertical-align: -0.15em; */
-  /* fill: white; */
-  /* overflow: hidden; */
-}
-</style>
-<style>
-path {
-  fill: inherit !important;
+  overflow: hidden;
+  fill: currentColor;
 }
 </style>

@@ -12,28 +12,38 @@ import 'highlight.js/styles/googlecode.css' //样式文件
 import VueClipboards from 'vue-clipboard2'
 import cookies from 'vue-cookies'
 import request from '@/utils/request.js'
+
+
+import 'virtual:svg-icons-register'
+
+import SvgIcon from '@/assets/icons/svg-icon.vue'
+
+Vue.component('svg-icon', SvgIcon)
+
+
 Vue.prototype.$cookies = cookies
 Vue.prototype.request = request
 // 高亮语法
 Vue.config.productionTip = false // 设置为 false 以阻止 Vue 在启动时生成生产提示
-Vue.directive('highlight',function (el) {
-  let blocks = el.querySelectorAll('pre code');
-  blocks.forEach((block)=>{
+Vue.directive('highlight', function(el) {
+  let blocks = el.querySelectorAll('pre code')
+  blocks.forEach((block) => {
     hljs.highlightBlock(block)
   })
 })
-Vue.use(VueClipboards); //复制插件
-Vue.use(VueDOMPurifyHTML);//markdown文本过滤
-Vue.use(ElementUI);//elementUI
-Vue.use(mavonEditor);//编辑器
+
+Vue.use(VueClipboards) //复制插件
+Vue.use(VueDOMPurifyHTML)//markdown文本过滤
+Vue.use(ElementUI)//elementUI
+Vue.use(mavonEditor)//编辑器
 new Vue({
   beforeCreate() {
     Vue.prototype.$bus = this // 启用全局事件总线功能
   },
   el: '#app',
   router,
-  components:{App},
-  template:'<App/>',
+  components: { App },
+  template: '<App/>',
   store,
   render: h => h(App),
 })
