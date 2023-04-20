@@ -91,7 +91,7 @@
 
         <transition name='item-list'>
           <div class='video-item-list' v-show='openItemList'>
-            <div v-for='index in 12' class="video-item" :style="id===index ? currentStyle : ''">
+            <div v-for='index in 12' class="video-item" :style="id===Detail ? currentStyle : ''">
                 <a :href="'/#/video/'+title+'/'+index" target='_blank'>
                   <div class='item-number'>{{ index }}</div>
                   <div class='item-tag'>免费</div>
@@ -372,9 +372,7 @@ export default {
   .left-body {
     width: 25%;
     margin-left: 10px;
-    background: #fff;
     height: 1000px;
-
     .author {
       width: 100%;
       height: 100px;
@@ -382,11 +380,9 @@ export default {
       flex-direction: row;
       box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       margin-bottom: 10px;
-
       .avatar {
         width: 15%;
         height: 100%;
-
         ::v-deep .el-avatar {
           margin-left: 5px;
           margin-top: 15px;
@@ -395,7 +391,6 @@ export default {
 
       .author-info {
         width: 100%;
-
         .author-name {
           width: 100%;
           display: flex;
@@ -479,6 +474,7 @@ export default {
           margin-bottom: 5px;
           margin-left: 5px;
           text-align: center;
+          background: #fff;
         }
         .current {
           background: #7f96e0;
