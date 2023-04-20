@@ -55,7 +55,7 @@ export default {
   max-width: 38%;
   background: #fff;
   text-indent: 1em;
-
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   .latest-news-content-title {
     height: 30px;
     font-size: 18px;

@@ -84,7 +84,7 @@ export default {
   height: 310px;
   background: #fff;
   margin-top: 15px;
-
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   .title {
     font-size: 18px;
     height: 35px;

@@ -20,7 +20,7 @@ export default {
   height: 300px;
   background: #fff;
   margin-right: 15px;
-
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
   .el-carousel__item h3 {
     color: #475669;
     font-size: 18px;

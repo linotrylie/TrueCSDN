@@ -1,16 +1,6 @@
 <template>
   <div class='article-list'>
     <div class='main'>
-<!--      <div class='head'>-->
-<!--        <div class='tab'>-->
-
-<!--        </div>-->
-<!--        <div class='search'>-->
-
-<!--        </div>-->
-<!--      </div>-->
-<!--      <div class='list'>-->
-<!--      </div>-->
       <Article></Article>
     </div>
     <div class='left-content'>
@@ -23,10 +13,10 @@
 </template>
 
 <script>
-import Article from '@/layout/post/Article.vue'
+import Article from '@/layout/article/Article.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
-import Author from '@/layout/home/Author.vue'
+import Author from '@/layout/home/RecommendAuthor.vue'
 export default {
   name: 'List',
   components: { Author, Ad, Article,Recommend },

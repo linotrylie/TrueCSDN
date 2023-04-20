@@ -158,8 +158,6 @@ import VolumeBar from "./volume-bar.vue";
 import ProgressBar from "./progress-bar.vue";
 import PlayerBarrageScreen from "./player-barrage-screen.vue";
 
-// import '@/assets/icons/index.js'; // icon
-
 export default {
   name: "barrage-videoplayer",
   components: { VolumeBar, ProgressBar, PlayerBarrageScreen },

@@ -214,7 +214,7 @@ export default {
       display: flex;
       flex-direction: row;
       margin-bottom: 10px;
-
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       .article-content-item-image {
         width: 25%;
         height: 183px;

@@ -9,7 +9,8 @@ export default {
   name: 'App',
   components: { Layout },
   data() {
-    return {}
+    return {
+    }
   },
   methods: {},
   mounted() {},
@@ -24,4 +25,5 @@ export default {
   #app {
     background: #f5f2f2;
   }
+
 </style>

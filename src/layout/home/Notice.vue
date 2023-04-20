@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class='notice-body'>
     <div class='title'>
       <p>公告</p>
       <div class='content' v-html='content'>
@@ -23,30 +23,34 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.title {
-  min-height: 200px;
-  background: #fff;
+.notice-body {
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  .title {
+    min-height: 200px;
+    background: #fff;
 
-  p {
-    font-size: 18px;
-    font-weight: 500;
-    box-shadow: 1px 1px 1px #efeaea;
-    text-align: center;
-    height: 30px;
-  }
-
-  .content {
-    margin-top: 5px;
-    height: auto;
-    text-indent: 1em;
-
-    ::v-deep a {
-      color: #4e81f6;
+    p {
+      font-size: 18px;
+      font-weight: 500;
+      box-shadow: 1px 1px 1px #efeaea;
+      text-align: center;
+      height: 30px;
     }
 
-    ::v-deep a:hover {
-      color: #4670de;
+    .content {
+      margin-top: 5px;
+      height: auto;
+      text-indent: 1em;
+
+      ::v-deep a {
+        color: #4e81f6;
+      }
+
+      ::v-deep a:hover {
+        color: #4670de;
+      }
     }
   }
 }
+
 </style>

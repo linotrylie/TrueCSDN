@@ -21,8 +21,8 @@
           <div class='mid'></div>
           <div class='right'>
             <div class='follow'>
-              <el-button v-show='!IsFollow' :loading='true' type='primary'>关注</el-button>
-              <el-button v-show='IsFollow' disabled>已关注</el-button>
+              <el-button v-show='!IsFollow' @click='changeFollow(IsFollow)' type='primary'>关注</el-button>
+              <el-button v-show='IsFollow' @click='changeFollow(IsFollow)'>已关注</el-button>
             </div>
           </div>
         </div>
@@ -247,6 +247,9 @@ export default {
       console.log(this.repo)
       this.dialogFormVisible = false
     },
+    changeFollow(IsFollow) {
+      this.IsFollow = !IsFollow;
+    }
   },
   created() {
     this.PostId = this.$route.params.id

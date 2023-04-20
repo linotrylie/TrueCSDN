@@ -13,15 +13,15 @@ import VueClipboards from 'vue-clipboard2'
 import cookies from 'vue-cookies'
 import request from '@/utils/request.js'
 
-
 import 'virtual:svg-icons-register'
 
 import SvgIcon from '@/assets/icons/svg-icon.vue'
 
 Vue.component('svg-icon', SvgIcon)
 
-
 Vue.prototype.$cookies = cookies
+
+
 Vue.prototype.request = request
 // 高亮语法
 Vue.config.productionTip = false // 设置为 false 以阻止 Vue 在启动时生成生产提示

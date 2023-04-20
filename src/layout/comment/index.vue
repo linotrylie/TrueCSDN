@@ -8,9 +8,9 @@
         @error="(e) => e.target.classList.add('error')"
       />
     </comment-form>
-
+    <el-empty :image-size="200" v-if='noComment'></el-empty>
     <!-- 底部评论列表 -->
-    <comment-list v-if='cacheData.length > 0' ref='comment-list'>
+    <comment-list v-if='cacheData.length > 0' ref='comment-list' v-else>
       <!-- 单条评论 -->
       <comment-item
         v-for='(comment, i) in cacheData'
@@ -129,6 +129,7 @@ export default {
     return {
       forms: [], // 显示在视图上的所有表单 id
       cacheData: [],
+      noComment:false,
     }
   },
   computed: {
@@ -379,6 +380,7 @@ export default {
       // 更新外部数据
       const data = this.cacheData.map(this.transformToOriginObj)
       this.$emit('input', data)
+      this.noComment = false;
     },
 
     /**

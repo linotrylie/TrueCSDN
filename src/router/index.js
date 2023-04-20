@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '@/layout/home/home.vue'
 import Login from '@/layout/auth/Login.vue'
-import PostList from '@/layout/post/List.vue'
+import PostList from '@/layout/article/List.vue'
 import Video from '@/layout/video/index.vue'
 import ArticleDetail from '@/layout/article/Detail.vue'
 Vue.use(VueRouter)
@@ -12,42 +12,49 @@ const routes = [
     path: '/',
     index:1,
     isHidden:false,
-    name:'首页',
+    name:'home',
     component: Home,
   },
   {
-    path: '/article/detail/:id',
+    path: '/article/:title/:id',
     index:2,
     isHidden:true,
-    name:'文章详情',
+    name:'article-info',
     component: ArticleDetail,
   },
   {
     path: '/login',
     index:3,
     isHidden:true,
-    name:'登录',
+    name:'login',
     component: Login,
   },
   {
-    path: '/post/list',
+    path: '/post',
     index:4,
     isHidden:false,
-    name:'文章',
+    name:'article-list',
     component: PostList,
   },
   {
     path: '/user-center/:id',
     index:5,
     isHidden:true,
-    name:'用户中心',
+    name:'user-center',
     component: Login,
+  },
+  {
+    path: '/video/:title/:id',
+    index:6,
+    isHidden:true,
+    name:'video-info',
+    component: Video,
   },
   {
     path: '/video',
     index:6,
     isHidden:false,
-    name:'视频',
+    name:'video-info',
     component: Video,
   },
 ]
