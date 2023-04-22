@@ -59,13 +59,18 @@ const errorHandle = (status, other) => {
       tip('请求的资源不存在');
       break;
     default:
-      console.log(other);
+      // console.log(other);
   }}
 
 // 创建axios实例
-var instance = axios.create({    timeout: 1000 * 12});
+var instance = axios.create({
+  timeout: 1000 * 12,
+  withCredentials:true
+});
 // 设置post请求头
 instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+// instance.defaults.headers.post['Access-Control-Allow-Origin'] = 'http://localhost:8787/';
+// instance.defaults.headers.post['Access-Control-Request-Method'] = '*';
 /**
  * 请求拦截器
  * 每次请求前，如果存在token则在请求头中携带token

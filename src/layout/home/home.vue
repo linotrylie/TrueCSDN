@@ -25,7 +25,6 @@ import Article from '@/layout/article/Article.vue'
 import Notice from '@/layout/home/Notice.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
-
 export default {
   components: {
     Recommend,

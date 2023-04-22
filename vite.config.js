@@ -39,6 +39,13 @@ export default defineConfig(({ command, mode }) => {
       port: 5173, // 指定开发服务器端口。注意：如果端口已经被使用，Vite 会自动尝试下一个可用的端口，所以这可能不是开发服务器最终监听的实际端口
       strictPort: false, // 设为 true 时若端口已被占用则会直接退出，而不是尝试下一个可用端口
       open: true, // 是否在开发服务器启动时，自动在浏览器中打开应用程序
+      proxy:{
+        "/api":{
+          target:"http://localhost:8787/",
+          changeOrigin:true,
+          rewrite:(path) => path.replace(/^\/api/,"")
+        }
+      }
     },
 
     build: {

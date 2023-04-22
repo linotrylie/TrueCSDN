@@ -1,4 +1,5 @@
 <template>
+
   <div class='header'>
     <div class='nav'>
       <el-row :gutter='20' type='flex' justify='space-around'>
@@ -36,12 +37,24 @@
         </el-col>
         <el-col :span='4'>
           <div class='avatar-nav'>
-            <router-link to='/login' v-show='isLogin'>
-              <el-avatar :size='50' :src='circleUrl'></el-avatar>
-            </router-link>
-            <router-link :to="{name:'user-center',query:{id:userid}}" v-show='!isLogin'>
+            <router-link to='/login' v-if='!isLogin'>
               <el-avatar :size='50' :src='userSrc'></el-avatar>
             </router-link>
+
+            <el-dropdown @command="handleClick" v-else>
+              <router-link :to="{name:'user-center',query:{id:userid}}">
+              <span class="el-dropdown-link">
+                <el-avatar :size='50' :src="userSrc"></el-avatar>
+              </span>
+              </router-link>
+              <el-dropdown-menu slot="dropdown" >
+                <el-dropdown-item command='user-center'>个人中心</el-dropdown-item>
+                <el-dropdown-item command='article'>发布文章</el-dropdown-item>
+                <el-dropdown-item command='video'>上传视频</el-dropdown-item>
+                <el-dropdown-item command='software'>分享资源</el-dropdown-item>
+                <el-dropdown-item command='logout'>登出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
           </div>
         </el-col>
       </el-row>
@@ -50,8 +63,7 @@
 </template>
 
 <script>
-import {getToken} from '@/utils/auth.js'
-import router from '@/router/index.js'
+import {getToken,delUser,removeToken} from '@/utils/auth.js'
 
 export default {
   name: 'Header',
@@ -59,28 +71,66 @@ export default {
     return {
       activeIndex: '1',
       keyword: '',
-      circleUrl: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
-      userSrc:'https://pic.code-nav.cn/post_cover/1601072287388278786/MOfhTNjO-%E4%B8%93%E6%A0%8F%E5%9B%BE%E7%89%87.jpeg',
+      userSrc:'',
       menus: [],
       isLogin:true,
-      userid:12
+      userid:0
     }
   },
   methods: {
     handleSelect(key, keyPath) {
     },
     handleUser() {
-
+      this.userid = getToken('userId');
+    },
+    handleClick(val) {
+      if(val === '' || val === null) {
+        return;
+      }
+      switch (val) {
+        case 'logout':
+          this.logout();
+          break;
+        default:
+            break;
+      }
+    },
+    logout() {
+      this.$api.auth.logout({}).then(res => {
+        if(res.data.code === 0) {
+          this.$notify.error(res.data.msg);
+          return;
+        }
+        delUser();
+        removeToken();
+        this.$message.success('登出成功！');
+        setTimeout(() => {
+          this.$router.go(0);
+        }, 2000)
+      }).catch(err => {
+        this.$notify.error('网络错误！');
+      });
     }
+
   },
   mounted() {
 
   },
   created() {
     this.menus = [...this.$router.options.routes]
-    let token = getToken();
-    this.isLogin = !(token === null || token === '');
+    let token = getToken('access_token');
+    console.log(token)
+    this.isLogin = !(token === null || token === '' || token === undefined);
+    console.log(this.isLogin)
+    this.userSrc = getToken('avatar');
+    this.handleUser();
   },
+  beforeCreate() {
+
+  },
+  beforeUpdate() {
+
+  }
 }
 </script>
 
@@ -124,6 +174,15 @@ export default {
 
           ::v-deep .el-avatar {
             margin-top: 11pt;
+          }
+          .el-dropdown {
+            vertical-align: top;
+          }
+          .el-dropdown + .el-dropdown {
+            margin-left: 15px;
+          }
+          .el-icon-arrow-down {
+            font-size: 12px;
           }
         }
 
