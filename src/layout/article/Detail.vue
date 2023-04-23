@@ -4,33 +4,32 @@
       <div class='article'>
         <div class='header'>
           <div class='avatar'>
-            <el-avatar src='https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'></el-avatar>
+            <el-avatar :src='ArticleData.user.avatar'></el-avatar>
           </div>
           <div class='left'>
             <div class='author-info'>
               <p>
-                <router-link to='/home'>Linotrylie1234123412341324</router-link>
+                <router-link to='/home'>{{ArticleData.user.nickname}}</router-link>
               </p>
               <el-tag v-for='(item,index) in tags' :key='index' :color='item.color' :type='item.type'>{{ item.name }}
               </el-tag>
             </div>
             <div class='article-info'>
-              <p>2023-4-16 20:05:30&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;阅读 {{ readCount }}</p>
+              <p>{{ArticleData.created_at}}&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;阅读 {{ ArticleData.play_num }}</p>
             </div>
           </div>
           <div class='mid'></div>
           <div class='right'>
             <div class='follow'>
-              <el-button v-show='!IsFollow' @click='changeFollow(IsFollow)' type='primary'>关注</el-button>
-              <el-button v-show='IsFollow' @click='changeFollow(IsFollow)'>已关注</el-button>
+              <el-button v-show='!IsFollow' @click='changeFollow(IsFollow)' type='primary' :disabled='disable'>关注</el-button>
+              <el-button v-show='IsFollow' @click='changeFollow(IsFollow)'  :disabled='disable'>已关注</el-button>
             </div>
           </div>
         </div>
       </div>
-
-      <mymarked :dompurify='false' :initialValue='html' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
+      <mymarked :dompurify='false' :initialValue='ArticleData.content' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
       <div class='interaction-layout'>
-        <Interaction :id='PostId' :title='title' type='article'></Interaction>
+        <Interaction :id='ArticleData.id' :title='ArticleData.title' type='article'></Interaction>
       </div>
       <div ref='comment' :style='wrapStyle' class='comment-wrap'>
         <Comment
@@ -53,7 +52,6 @@
   </div>
 </template>
 <script>
-import { Post } from '@/api/index.js'
 import mymarked from './Markdown.vue'
 import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
@@ -96,19 +94,16 @@ export default {
       },
     ]
     return {
-      PostId: 1,
       tags: [
         { name: 'V5', type: 'success', color: '#fff' },
         { name: '会员', type: 'success', color: '#fff' },
         { name: '大师', type: 'success', color: '#fff' },
         { name: 'Coder', type: 'success', color: '#fff' },
       ],
-      readCount: 1238,
       IsFollow: true,
-      IsFollowed: false,
-      html: '',//文章内容
-      title: '',//文章标题
       data: [],
+      ArticleData:{},
+      disable:false,
       commentData: {
         id: '_id',
         content: 'content',
@@ -149,21 +144,20 @@ export default {
   },
   methods: {
     LoadArticle() {
-      let url = 'https://www.code-nav.cn/api/post/list/page/vo'
-      let postData = {
-        current: 1,
-        reviewStatus: 1,
-        sortField: 'createTime',
-        sortOrder: 'descend',
+      this.ArticleData = {}
+      let params = {
+        id:this.$route.params.id
       }
-      Post(url, postData).then(res => {
-        this.html = res.data.records[5].content
-        if (res.data.records[5].title === null) {
-          this.title = res.data.records[5].tags.join('')
-        } else {
-          this.title = res.data.records[5].title
+      this.$api.article.articleDetail(params).then(res => {
+        if(res.data !== "" && res.data.code) {
+          this.ArticleData = res.data.data.detail
+          var ts = this.ArticleData.created_at.split("T");
+          this.ArticleData.created_at= ts[0] +" "+ts[1].substring(0,8);
+          this.IsFollow = res.data.data.is_followed
+          this.disable = res.data.data.disable
+        }else{
+          this.$notify.error(res.data.msg);
         }
-
       }).catch(err => {
         console.log(err)
         this.$message({
@@ -252,9 +246,10 @@ export default {
     }
   },
   created() {
-    this.PostId = this.$route.params.id
-    this.LoadArticle()
     this.addData(1)
+    console.log(this.$route.params.id)
+    this.LoadArticle();
+
   },
   computed: {},
 }

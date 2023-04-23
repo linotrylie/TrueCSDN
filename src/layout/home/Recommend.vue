@@ -2,8 +2,8 @@
   <div>
     <div class='recommend'>
       <div class='title'>
-        <p>{{title}}</p>
-        <a href='#' class='more'>查看更多</a>
+        <p>{{ title }}</p>
+        <a class='more' href='#'>查看更多</a>
       </div>
       <ul class='list-unstyled'>
         <li>
@@ -53,28 +53,28 @@
 
 <script>
 export default {
-  props:['type'],
+  props: ['type'],
   name: 'Recommend',
   data() {
     return {
-      title:''
+      title: '',
     }
   },
   mounted() {
 
   },
-  methods : {
+  methods: {
     loadRecommand() {
-      if(this.type === 'news') {
+      if (this.type === 'news') {
         this.title = '最新推荐'
-      } else if(this.type === 'download') {
+      } else if (this.type === 'download') {
         this.title = '下载榜单'
       }
-    }
+    },
   },
   created() {
-    this.loadRecommand();
-  }
+    this.loadRecommand()
+  },
 }
 </script>
 
@@ -85,6 +85,7 @@ export default {
   background: #fff;
   margin-top: 15px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+
   .title {
     font-size: 18px;
     height: 35px;
@@ -110,7 +111,7 @@ export default {
 
   .list-unstyled {
     li {
-      text-indent: 1em;
+      text-indent: .5em;
       overflow: hidden;
       white-space: normal;
       word-break: break-word;

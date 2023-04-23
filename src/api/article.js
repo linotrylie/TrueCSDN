@@ -4,20 +4,17 @@ import qs from 'qs'; // 根据需求是否导入qs模块
 
 const article = {
   // 新闻列表
-  articleList () {
-    return instance.get(`${base.sq}/topics`);
+  articleList (params) {
+    return instance.post(`${base.t}/vod/list`,qs.stringify(params));
   },
   // 新闻详情,演示
-  articleDetail (id, params) {
-    return instance.get(`${base.sq}/topic/${id}`, {
-      params: params
-    });
+  async articleDetail (params) {
+    return instance.post(`${base.t}/vod`,qs.stringify(params));
   },
-  // post提交
-  login (params) {
-    return instance.post(`${base.sq}/accesstoken`, qs.stringify(params));
-  }
-  // 其他接口…………
+  tagList() {
+    return instance.get(`${base.t}/tag/list`);
+  },
+
 }
 
 export default article;
