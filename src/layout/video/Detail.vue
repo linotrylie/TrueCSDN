@@ -179,6 +179,7 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id
+    this.title = this.$route.params.title
     this.currentStyle = `background: #7f96e0;color:#fff;`
     console.log(this.id)
   },
@@ -250,7 +251,7 @@ export default {
       this.barrageXml = this.bXml
     }
     this.addData(1)
-    document.title = this.title
+    document.title = this.$route.params.title
 
   },
   beforeCreate() {
@@ -284,18 +285,12 @@ export default {
         line-height: 40px;
         display: flex;
         flex-direction: row;
-
         ::v-deep .svg-icon {
           margin-top: 8px;
           margin-right: 8px;
           margin-left: 8px;
           opacity: 0.5;
         }
-
-        ::v-deep .svg-icon:hover {
-          content: "播放数";
-        }
-
         span {
           width: 20%;
           height: 40px;

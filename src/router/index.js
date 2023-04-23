@@ -5,7 +5,7 @@ import Login from '@/layout/auth/Login.vue'
 import PostList from '@/layout/article/List.vue'
 import Video from '@/layout/video/Detail.vue'
 import VideoList from '@/layout/video/Index.vue'
-import VideoList2 from '@/layout/video/index2.vue'
+import SoftwareList from '@/layout/software/Index.vue'
 
 import ArticleDetail from '@/layout/article/Detail.vue'
 Vue.use(VueRouter)
@@ -24,7 +24,7 @@ const routes = [
     index:2,
     isHidden:true,
     name:'article-info',
-    menu:'首页',
+    menu:'文章详情',
     component: ArticleDetail,
   },
   {
@@ -61,19 +61,27 @@ const routes = [
   },
   {
     path: '/video',
-    index:6,
+    index:7,
     isHidden:false,
     name:'video',
     menu:'视频',
     component: VideoList,
   },
   {
-    path: '/video2',
-    index:6,
+    path: '/software',
+    index:8,
     isHidden:false,
-    name:'video',
-    menu:'视频',
-    component: VideoList2,
+    name:'software',
+    menu:'软件工具',
+    component: SoftwareList,
+  },
+  {
+    path: '/software/:title/:id',
+    index:9,
+    isHidden:true,
+    name:'software-info',
+    menu:'软件详情',
+    component: ArticleDetail,
   },
 ]
 

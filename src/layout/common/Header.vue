@@ -13,7 +13,7 @@
                 <template v-if=' item.children !== undefined && item.children !== null  &&  item.children.length > 0'>
                   <el-submenu :index='item.path' :key="index + ''">
                     <template slot='title'>
-                      {{ item.name }}
+                      {{ item.menu }}
                     </template>
                     <el-menu-item v-for='(child , cindex) in item.children' :index='child.path'
                                   :key="index + '-' + cindex"
@@ -22,7 +22,7 @@
                   </el-submenu>
                 </template>
                 <template v-else>
-                  <el-menu-item :index='item.path' :key='index' v-if='!item.isHidden'>{{ item.name }}</el-menu-item>
+                  <el-menu-item :index='item.path' :key='index' v-if='!item.isHidden'> {{ item.menu }}</el-menu-item>
                 </template>
               </template>
             </el-menu>
