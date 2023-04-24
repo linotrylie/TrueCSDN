@@ -37,14 +37,15 @@
         </el-col>
         <el-col :span='4'>
           <div class='avatar-nav'>
+
             <router-link to='/login' v-if='!isLogin'>
-              <el-avatar :size='50' :src='userSrc'></el-avatar>
+              <el-avatar :size='50' :src="getAvatar()"></el-avatar>
             </router-link>
 
             <el-dropdown @command="handleClick" v-else>
-              <router-link :to="{name:'user-center',query:{id:userid}}">
+              <router-link :to="{name:'user-center',params:{id:userid}}">
               <span class="el-dropdown-link">
-                <el-avatar :size='50' :src="userSrc"></el-avatar>
+                <el-avatar :size='50' :src="getAvatar()"></el-avatar>
               </span>
               </router-link>
               <el-dropdown-menu slot="dropdown" >
@@ -71,20 +72,23 @@ export default {
     return {
       activeIndex: '1',
       keyword: '',
-      userSrc:'',
+      userSrc: '',
       menus: [],
-      isLogin:true,
-      userid:0
+      isLogin: false,
+      userid: 0
     }
   },
   methods: {
     handleSelect(key, keyPath) {
     },
     handleUser() {
-      this.userid = getToken('userId');
+      this.userid = getToken('id');
+    },
+    getAvatar() {
+      return getToken('avatar');
     },
     handleClick(val) {
-      if(val === '' || val === null) {
+      if (val === '' || val === null) {
         return;
       }
       switch (val) {
@@ -92,12 +96,12 @@ export default {
           this.logout();
           break;
         default:
-            break;
+          break;
       }
     },
     logout() {
       this.$api.auth.logout({}).then(res => {
-        if(res.data.code === 0) {
+        if (res.data.code === 0) {
           this.$notify.error(res.data.msg);
           return;
         }
@@ -118,17 +122,13 @@ export default {
   },
   created() {
     this.menus = [...this.$router.options.routes]
-    let token = getToken('access_token');
-    console.log(token)
-    this.isLogin = !(token === null || token === '' || token === undefined);
-    console.log(this.isLogin)
-    this.userSrc = getToken('avatar');
     this.handleUser();
+    console.log(this.userid);
   },
-  beforeCreate() {
+  computed:{
 
   },
-  beforeUpdate() {
+  watch:{
 
   }
 }
