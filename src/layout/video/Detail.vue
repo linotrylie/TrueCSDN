@@ -370,7 +370,7 @@ export default {
     height: 1000px;
     .author {
       width: 100%;
-      height: 100px;
+      height: 140px;
       display: flex;
       flex-direction: row;
       box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
@@ -390,8 +390,7 @@ export default {
           width: 100%;
           display: flex;
           flex-direction: row;
-          height: 40px;
-
+          height: 70px;
           ::v-deep .el-button {
             margin: 0 auto;
             margin-top: 5px;
@@ -406,7 +405,7 @@ export default {
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
-            margin-top: 20px;
+            margin-top: 15px;
             margin-left: 15px;
           }
         }
