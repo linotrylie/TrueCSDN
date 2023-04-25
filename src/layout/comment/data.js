@@ -5,6 +5,7 @@ export const EXAMPLE_DATA = [
     visitor: {
       name: '我叫白云',
       avatar: '',
+      commentId:1
     },
     createAt: '2020.11.24',
     likes: 1,
@@ -17,6 +18,7 @@ export const EXAMPLE_DATA = [
         visitor: {
           name: 'NARUTO',
           avatar: '',
+          commentId:2
         },
         createAt: '2020.11.25',
       },
@@ -26,6 +28,7 @@ export const EXAMPLE_DATA = [
         visitor: {
           name: '我叫黑土',
           avatar: '',
+          commentId:3
         },
         createAt: '2020.11.25',
         reply: {
@@ -41,6 +44,7 @@ export const EXAMPLE_DATA = [
     visitor: {
       name: '我叫黑土',
       avatar: '',
+      commentId:4
     },
     createAt: '2020.12.5',
     childrenComments: [
@@ -50,6 +54,7 @@ export const EXAMPLE_DATA = [
         visitor: {
           name: 'NARUTO',
           avatar: '',
+          commentId:5
         },
         createAt: '2020.12.6',
       },

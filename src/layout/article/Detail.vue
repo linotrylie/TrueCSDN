@@ -4,12 +4,12 @@
       <div class='article'>
         <div class='header'>
           <div class='avatar'>
-            <el-avatar :src='ArticleData.user.avatar'></el-avatar>
+            <el-avatar :src="author.avatar"></el-avatar>
           </div>
           <div class='left'>
             <div class='author-info'>
               <p>
-                <router-link to='/home'>{{ArticleData.user.nickname}}</router-link>
+                <router-link to='/home'>{{author.nickname}}</router-link>
               </p>
               <el-tag v-for='(item,index) in tags' :key='index' :color='item.color' :type='item.type'>{{ item.name }}
               </el-tag>
@@ -27,7 +27,7 @@
           </div>
         </div>
       </div>
-      <mymarked :dompurify='false' :initialValue='ArticleData.content' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
+      <mymarked :dompurify='true' :initialValue='ArticleData.content' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
       <div class='interaction-layout'>
         <Interaction :id='ArticleData.id' :title='ArticleData.title' type='article'></Interaction>
       </div>
@@ -61,6 +61,7 @@ import { EXAMPLE_DATA } from '../comment/data.js'
 import { Notification } from 'element-ui'
 import { CONSTANT } from '@/config/constant.js'
 import Interaction from '@/layout/interaction/Index.vue'
+import { delUser, getToken, removeToken } from '@/utils/auth.js'
 
 export default {
   name: 'Detail',
@@ -74,25 +75,12 @@ export default {
   },
   props: ['id'],
   data() {
-    const users = [
-      {
-        name: 'Up&Up',
-        avatar: '',
-        author: false,
-      },
-      {
-        name: '我叫白云',
-        avatar: '',
-      },
-      {
-        name: '我叫黑土',
-        avatar: '',
-      },
-      {
-        name: 'NARUTO',
-        avatar: '',
-      },
-    ]
+    const users = {
+      name: '',
+      avatar: '',
+      author: false,
+      commentId:0
+    }
     return {
       tags: [
         { name: 'V5', type: 'success', color: '#fff' },
@@ -102,7 +90,12 @@ export default {
       ],
       IsFollow: true,
       data: [],
-      ArticleData:{},
+      ArticleData:{
+        user:{
+          avatar:"",
+          nickname:"",
+        }
+      },
       disable:false,
       commentData: {
         id: '_id',
@@ -115,9 +108,9 @@ export default {
         createAt: 'createAt',
         user: 'visitor',
       },
-      currentUser: users[0],
-      users,
+      currentUser:users,
       wrapStyle: '',
+      author:{},
       downloadList: [
         {
           url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
@@ -143,6 +136,16 @@ export default {
     // this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
   },
   methods: {
+    LoadCurrentUser(){
+      if(getToken('nickname') !== undefined || getToken('nickname')!== "") {
+        this.currentUser = {
+          name:getToken('nickname'),
+          avatar:getToken('avatar'),
+          author: this.ArticleData.user_id === getToken('id')
+        }
+        console.log(this.currentUser)
+      }
+    },
     LoadArticle() {
       this.ArticleData = {}
       let params = {
@@ -155,6 +158,7 @@ export default {
           this.ArticleData.created_at= ts[0] +" "+ts[1].substring(0,8);
           this.IsFollow = res.data.data.is_followed
           this.disable = res.data.data.disable
+          this.author = res.data.data.detail.user
         }else{
           this.$notify.error(res.data.msg);
         }
@@ -168,12 +172,46 @@ export default {
 
     },
     async submit(newComment, parent, add) {
+      var id = 0;
       const res = await new Promise((resolve) => {
         setTimeout(() => {
           resolve({ newComment, parent })
         }, 300)
+        var pid = 0;
+        if(newComment.reply !== null) {
+          pid = newComment.reply.commentId
+        } else if(parent !== null) {
+          pid = parent.id
+        }
+        let param = {
+          userId:getToken('id'),
+          imgSrc:newComment.imgSrc,
+          vodId:this.$route.params.id,
+          liked:0,
+          likes:0,
+          content: newComment.content,
+          pid:pid
+        }
+        if(param.userId === undefined) {
+          this.$notify.error('未登录！');
+          return;
+        }
+
+        this.$api.interaction.submitComment(param).then(res => {
+          if (res.data.code === 0) {
+            this.$notify.error(res.data.msg);
+            return;
+          }
+          this.$message.success('评论成功！');
+          id = res.data.data.id;
+          newComment.visitor.commentId = id;
+          console.log(id,res.data.data.id)
+        }).catch(err => {
+          console.log(err)
+          this.$notify.error('网络错误！');
+        })
       })
-      add(Object.assign(res.newComment, { _id: new Date().getTime() }))
+      add(Object.assign(res.newComment, { _id: id }))
       console.log('addComment: ', res)
     },
     async like(comment) {
@@ -206,10 +244,20 @@ export default {
       })
       console.log('deleteComment: ', res)
     },
-    addData(times) {
-      setTimeout(() => {
-        this.data = new Array(times).fill(EXAMPLE_DATA).flat(Infinity)
-      }, 0)
+    addData() {
+      let params = {
+        vid:this.$route.params.id,
+      }
+      this.$api.interaction.getCommentList(params).then(res => {
+        if (res.data.code === 0) {
+          this.$notify.error(res.data.msg);
+          return;
+        }
+        this.data = res.data.data.list;
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error('网络错误！');
+      })
     },
     shareArticle(val) {
       let that = this
@@ -247,8 +295,10 @@ export default {
   },
   created() {
     this.addData(1)
-    console.log(this.$route.params.id)
     this.LoadArticle();
+    this.LoadCurrentUser();
+
+
 
   },
   computed: {},

@@ -2,6 +2,7 @@ import { get, post } from '@/utils/request.js'
 import auth from '@/api/auth.js'
 import base from '@/api/base.js'
 import article from '@/api/article.js'
+import interaction from '@/api/interaction.js'
 export function Post(url,data) {
   return post({url:url,data:data}).then(res => {
     if (res.code === 200) {
@@ -15,6 +16,7 @@ export function Post(url,data) {
 export default {
   auth,
   base,
-  article
+  article,
+  interaction
 }
 

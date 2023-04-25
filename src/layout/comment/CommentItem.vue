@@ -28,7 +28,8 @@
                 comment.reply.name + '：'
               }}</span>
           </span>
-          {{ comment.content }}
+          <span v-dompurify-html='comment.content'></span>
+<!--          {{ comment.content }}-->
           <div v-if='comment.imgSrc' class='img-box'>
             <img
               :src="comment.imgSrc || ''"

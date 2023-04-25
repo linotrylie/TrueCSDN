@@ -38,7 +38,7 @@
         <el-col :span='4'>
           <div class='avatar-nav'>
 
-            <router-link to='/login' v-if='!isLogin'>
+            <router-link to='/login' v-if='isLogin'>
               <el-avatar :size='50' :src="getAvatar()"></el-avatar>
             </router-link>
 
@@ -82,10 +82,15 @@ export default {
     handleSelect(key, keyPath) {
     },
     handleUser() {
-      this.userid = getToken('id');
+      if(getToken('id') !== undefined) {
+        this.userid = getToken('id');
+      }
+
     },
     getAvatar() {
-      return getToken('avatar');
+      if(getToken('avatar') !== undefined)
+        return getToken('avatar');
+      return "";
     },
     handleClick(val) {
       if (val === '' || val === null) {
