@@ -3,9 +3,14 @@ import Cookies from 'js-cookie'
 export function getToken(key='access_token') {
   return Cookies.get(key)
 }
+/*
 
-export function setToken(key='access_token',token) {
-  return Cookies.set(key, token)
+* 设置Cookies
+
+* */
+export function setToken (key= 'access_token', value, expiresTime = 14400) {
+  let expires = new Date(new Date() * 1 + expiresTime * 1000)
+  return Cookies.set(key, value, { expires: expires })
 }
 
 export function removeToken(key='access_token') {

@@ -29,7 +29,15 @@
       </div>
       <mymarked :dompurify='true' :initialValue='ArticleData.content' :markedOptions='{ breaks: true }' :tocNav='true'></mymarked>
       <div class='interaction-layout'>
-        <Interaction :id='ArticleData.id' :title='ArticleData.title' type='article'></Interaction>
+        <Interaction
+          :id='ArticleData.id'
+          :title='ArticleData.title'
+          :like_disable='likeDisable'
+          :collect_disable='collectDisable'
+          :is_like='is_like'
+          :is_collect='is_collect'
+          type='article'
+        ></Interaction>
       </div>
       <div ref='comment' :style='wrapStyle' class='comment-wrap'>
         <Comment
@@ -57,11 +65,10 @@ import Ad from '@/layout/home/Ad.vue'
 import Recommend from '@/layout/home/Recommend.vue'
 import Download from '@/layout/article/Download.vue'
 import Comment from '@/layout/comment/index.vue'
-import { EXAMPLE_DATA } from '../comment/data.js'
 import { Notification } from 'element-ui'
 import { CONSTANT } from '@/config/constant.js'
 import Interaction from '@/layout/interaction/Index.vue'
-import { delUser, getToken, removeToken } from '@/utils/auth.js'
+import { getToken} from '@/utils/auth.js'
 
 export default {
   name: 'Detail',
@@ -97,6 +104,10 @@ export default {
         }
       },
       disable:false,
+      likeDisable:false,
+      collectDisable:false,
+      is_like:false,
+      is_collect:false,
       commentData: {
         id: '_id',
         content: 'content',
@@ -112,22 +123,6 @@ export default {
       wrapStyle: '',
       author:{},
       downloadList: [
-        {
-          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
-          title: '百度网盘',
-        },
-        {
-          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
-          title: '本地下载',
-        },
-        {
-          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
-          title: '阿里云盘',
-        },
-        {
-          url: 'https://pan.baidu.com/s/1ENVo2fsAL2yz_8hi4dU3xw?pwd=t899',
-          title: '江苏电信',
-        },
       ],
     }
   },
@@ -136,14 +131,15 @@ export default {
     // this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
   },
   methods: {
-    LoadCurrentUser(){
+    LoadCurrentUser(author){
       if(getToken('nickname') !== undefined || getToken('nickname')!== "") {
         this.currentUser = {
           name:getToken('nickname'),
           avatar:getToken('avatar'),
-          author: this.ArticleData.user_id === getToken('id')
+          userId:getToken('id'),
+          author: author.id === getToken('id')
         }
-        console.log(this.currentUser)
+        console.log(author.id,getToken('id'),this.currentUser)
       }
     },
     LoadArticle() {
@@ -158,7 +154,14 @@ export default {
           this.ArticleData.created_at= ts[0] +" "+ts[1].substring(0,8);
           this.IsFollow = res.data.data.is_followed
           this.disable = res.data.data.disable
+          this.likeDisable = res.data.data.like_disable
+          this.collectDisable = res.data.data.collect_disable
+          this.is_like = res.data.data.is_like
+          this.is_collect = res.data.data.is_collect
           this.author = res.data.data.detail.user
+          if(this.ArticleData.type === 3) {
+            this.downloadList = this.ArticleData.downl_url;
+          }
         }else{
           this.$notify.error(res.data.msg);
         }
@@ -177,11 +180,13 @@ export default {
         setTimeout(() => {
           resolve({ newComment, parent })
         }, 300)
-        var pid = 0;
+        var pid;
         if(newComment.reply !== null) {
           pid = newComment.reply.commentId
         } else if(parent !== null) {
           pid = parent.id
+        }else{
+          pid = 0;
         }
         let param = {
           userId:getToken('id'),
@@ -196,7 +201,6 @@ export default {
           this.$notify.error('未登录！');
           return;
         }
-
         this.$api.interaction.submitComment(param).then(res => {
           if (res.data.code === 0) {
             this.$notify.error(res.data.msg);
@@ -205,14 +209,11 @@ export default {
           this.$message.success('评论成功！');
           id = res.data.data.id;
           newComment.visitor.commentId = id;
-          console.log(id,res.data.data.id)
         }).catch(err => {
-          console.log(err)
           this.$notify.error('网络错误！');
         })
       })
       add(Object.assign(res.newComment, { _id: id }))
-      console.log('addComment: ', res)
     },
     async like(comment) {
       const res = await new Promise((resolve) => {
@@ -241,6 +242,20 @@ export default {
         setTimeout(() => {
           resolve({ comment, parent })
         }, 300)
+        let params = {
+          id:comment._id,
+          user_id:getToken('id')
+        }
+        this.$api.interaction.delComment(params).then(res => {
+          if (res.data.code === 0) {
+            this.$notify.error(res.data.msg);
+            return;
+          }
+          this.$message.success('删除成功！');
+        }).catch(err => {
+          console.log(err)
+          this.$notify.error('网络错误！');
+        })
       })
       console.log('deleteComment: ', res)
     },
@@ -274,32 +289,14 @@ export default {
         })
       })
     },
-    likeArticle() {
-
-    },
-    collectArticle() {
-
-    },
-    handleDropdown(command) {
-      if (command === 'repo') {
-        this.dialogFormVisible = true
-      }
-    },
-    handleSubmitRepo() {
-      console.log(this.repo)
-      this.dialogFormVisible = false
-    },
     changeFollow(IsFollow) {
       this.IsFollow = !IsFollow;
     }
   },
   created() {
-    this.addData(1)
+    this.addData()
+    this.LoadCurrentUser(this.author);
     this.LoadArticle();
-    this.LoadCurrentUser();
-
-
-
   },
   computed: {},
 }

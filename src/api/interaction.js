@@ -9,7 +9,12 @@ import qs from 'qs'; // 根据需求是否导入qs模块
 
   getCommentList(params) {
     return instance.post(`${base.t}/comment/list`,qs.stringify(params));
-  }
-
+  },
+   delComment(params) {
+     return instance.post(`${base.t}/comment/del`,qs.stringify(params));
+   },
+   postInteraction(params) {
+     return instance.post(`${base.t}/vod/interaction`,qs.stringify(params));
+   }
 }
 export default interaction

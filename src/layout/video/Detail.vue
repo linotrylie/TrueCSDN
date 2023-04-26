@@ -223,10 +223,20 @@ export default {
       })
       console.log('deleteComment: ', res)
     },
-    addData(times) {
-      setTimeout(() => {
-        this.data = new Array(times).fill(EXAMPLE_DATA).flat(Infinity)
-      }, 0)
+    addData() {
+      let params = {
+        vid:this.$route.params.id,
+      }
+      this.$api.interaction.getCommentList(params).then(res => {
+        if (res.data.code === 0) {
+          this.$notify.error(res.data.msg);
+          return;
+        }
+        this.data = res.data.data.list;
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error('网络错误！');
+      })
     },
     //发送弹幕
     submitBarrage() {
@@ -250,7 +260,7 @@ export default {
     if (this.bXml !== undefined) {
       this.barrageXml = this.bXml
     }
-    this.addData(1)
+    this.addData()
     document.title = this.$route.params.title
 
   },

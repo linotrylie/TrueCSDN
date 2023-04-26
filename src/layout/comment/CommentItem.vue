@@ -47,7 +47,7 @@
           </time
           >
           <div
-            v-if='user.author === true'
+            v-if='user.userId == comment.user.userId || user.author === true'
             class='delete'
             @click.stop="$emit('comment-delete', { id, comment, parent })"
           >

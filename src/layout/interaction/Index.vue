@@ -2,19 +2,39 @@
   <div class='interaction'>
     <div class='like'>
       <el-button
-        icon='el-icon-sunrise-1'
+        v-show='!is_like'
+        :disabled='like_disable'
+        icon='el-icon-circle-check'
         size='medium'
         style='font-size: 16px;padding: 4px 8px;'
         title='点赞'
-        @click='likeArticle()'></el-button>
+        @click='handleInteraction(1,1)'></el-button>
+      <el-button
+        v-show='is_like'
+        :disabled='like_disable'
+        icon='el-icon-success'
+        size='medium'
+        style='font-size: 16px;padding: 4px 8px;'
+        title='取消点赞'
+        @click='handleInteraction(1,-1)'></el-button>
     </div>
     <div class='collect'>
       <el-button
-        icon='el-icon-folder-checked'
+        v-show='!is_collect'
+        :disabled='collect_disable'
+        icon='el-icon-star-off'
         size='medium'
         style='font-size: 16px;padding: 4px 8px;'
         title='收藏'
-        @click='collectArticle()'></el-button>
+        @click='handleInteraction(2,1)'></el-button>
+      <el-button
+        v-show='is_collect'
+        :disabled='collect_disable'
+        icon='el-icon-star-on'
+        size='medium'
+        style='font-size: 16px;padding: 4px 8px;'
+        title='取消收藏'
+        @click='handleInteraction(2,-1)'></el-button>
     </div>
     <div class='share'>
       <el-button
@@ -25,32 +45,32 @@
         @click='shareArticle()'></el-button>
     </div>
     <div class='report'>
-      <el-dropdown @command="handleDropdown">
+      <el-dropdown @command='handleDropdown'>
         <el-button>
           更多<i class='el-icon-arrow-down el-icon--right'></i>
         </el-button>
         <el-dropdown-menu slot='dropdown'>
-          <el-dropdown-item  command='repo'>举报</el-dropdown-item>
+          <el-dropdown-item command='repo'>举报</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-dialog title="举报" :visible.sync="dialogFormVisible">
-      <el-form :model="repo">
-        <el-form-item label="举报内容" >
-          <el-input v-model="repo.content" autocomplete="off" type="textarea"></el-input>
+    <el-dialog :visible.sync='dialogFormVisible' title='举报'>
+      <el-form :model='repo'>
+        <el-form-item label='举报内容'>
+          <el-input v-model='repo.content' autocomplete='off' type='textarea'></el-input>
         </el-form-item>
-        <el-form-item label="举报类型">
-          <el-select v-model="repo.type" placeholder="请选择举报类型">
-            <el-option label="色情暴力" value="色情暴力"></el-option>
-            <el-option label="版权侵害" value="版权侵害"></el-option>
-            <el-option label="质量极差" value="质量极差"></el-option>
-            <el-option label="违规推广未知广告" value="违规推广未知广告"></el-option>
+        <el-form-item label='举报类型'>
+          <el-select v-model='repo.type' placeholder='请选择举报类型'>
+            <el-option label='色情暴力' value='色情暴力'></el-option>
+            <el-option label='版权侵害' value='版权侵害'></el-option>
+            <el-option label='质量极差' value='质量极差'></el-option>
+            <el-option label='违规推广未知广告' value='违规推广未知广告'></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleSubmitRepo">确 定</el-button>
+      <div slot='footer' class='dialog-footer'>
+        <el-button @click='dialogFormVisible = false'>取 消</el-button>
+        <el-button type='primary' @click='handleSubmitRepo'>确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -62,13 +82,13 @@ import { Notification } from 'element-ui'
 
 export default {
   name: 'Interaction',
-  props:['type','id','title'],
+  props: ['type', 'id', 'title', 'like_disable', 'collect_disable', 'is_like', 'is_collect'],
   data() {
     return {
-      dialogFormVisible:false,
-      repo:{
-        content:'',
-        type:''
+      dialogFormVisible: false,
+      repo: {
+        content: '',
+        type: '',
       },
     }
   },
@@ -88,26 +108,41 @@ export default {
         })
       })
     },
-    likeArticle() {
-
-    },
-    collectArticle() {
-
-    },
     handleDropdown(command) {
-      if(command === 'repo') {
-        this.dialogFormVisible = true;
+      if (command === 'repo') {
+        this.dialogFormVisible = true
       }
     },
     handleSubmitRepo() {
-      console.log(this.repo);
-      this.dialogFormVisible =false;
-    }
+      console.log(this.repo)
+      this.dialogFormVisible = false
+    },
+    handleInteraction(val, num) {
+      let params = {
+        id: this.id,
+        type: val,
+        num: num,
+      }
+      this.$api.interaction.postInteraction(params).then(res => {
+        if (res.data.code === 0) {
+          this.$notify.error(res.data.msg)
+          return
+        }
+        if (val === 1) {
+          this.is_like = num > 0;
+        } else {
+          this.is_collect = num > 0;
+        }
+      }).catch(err => {
+        console.log(err)
+        this.$notify.error('网络错误！')
+      })
+    },
   },
   mounted() {
   },
   created() {
-  }
+  },
 }
 </script>
 
@@ -120,18 +155,20 @@ export default {
   display: flex;
   flex-direction: row;
 
-.share,.like,.report,.collect {
-  width: 25%;
-  height: 100px;
-  position: relative;
-  margin: 0 auto;
-  display: flex;
-.el-button {
-  margin: auto;
-}
-.el-dropdown {
-  margin: auto;
-}
-}
+  .share, .like, .report, .collect {
+    width: 25%;
+    height: 100px;
+    position: relative;
+    margin: 0 auto;
+    display: flex;
+
+    .el-button {
+      margin: auto;
+    }
+
+    .el-dropdown {
+      margin: auto;
+    }
+  }
 }
 </style>
