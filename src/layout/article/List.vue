@@ -36,12 +36,12 @@ export default {
   display: flex;
   flex-direction: row;
   .main {
-    width: 80%;
+    width: 75%;
     height: auto;
     margin: 0 auto;
   }
   .left-content {
-    width: 20%;
+    width: 25%;
     margin-left:10px;
     height: auto;
   }

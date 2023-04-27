@@ -11,15 +11,18 @@ const article = {
   async articleDetail (params) {
     return instance.post(`${base.t}/vod`,qs.stringify(params));
   },
-  tagList() {
+  async tagList() {
     return instance.get(`${base.t}/tag/list`);
   },
-  bannerList() {
+  async bannerList() {
     return instance.get(`${base.t}/banner/list`);
   },
-  hotList(params) {
+  async hotList(params) {
     return instance.get(`${base.t}/hot/list`,qs.stringify(params));
   },
+  async recommendList(params) {
+    return instance.post(`${base.t}/recommend/list`,qs.stringify(params));
+  }
 }
 
 export default article;

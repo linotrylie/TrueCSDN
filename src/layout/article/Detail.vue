@@ -39,7 +39,7 @@
           type='article'
         ></Interaction>
       </div>
-      <div ref='comment' :style='wrapStyle' class='comment-wrap'>
+      <div ref='comment' class='comment-wrap'>
         <Comment
           v-model='data'
           :before-delete='deleteComment'
@@ -120,15 +120,13 @@ export default {
         user: 'visitor',
       },
       currentUser:users,
-      wrapStyle: '',
       author:{},
       downloadList: [
       ],
     }
   },
   mounted() {
-    const header = this.$refs.header
-    this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
+
   },
   methods: {
     LoadCurrentUser(author){

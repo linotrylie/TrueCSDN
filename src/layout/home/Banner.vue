@@ -2,7 +2,7 @@
   <div class='banner-content'>
     <el-carousel :interval='8000' arrow='always'>
       <el-carousel-item v-for='(item,index) in BannerList' :key='index'>
-        <el-image :src='item.cover_img'>
+        <el-image :src='item.cover_img' style='height: auto;width: auto'>
         </el-image>
         <router-link :to="{name:'video-info',params:{title:item.title,id:item.id}}" v-if='item.type === 2'>
           <h3>{{item.title}}</h3>
@@ -45,7 +45,7 @@ export default {
 <style lang='scss' scoped>
 .banner-content {
   width: 65%;
-  height: 300px;
+  height: 318px;
   background: #fff;
   margin-right: 15px;
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);

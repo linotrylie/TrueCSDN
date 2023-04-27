@@ -3,48 +3,27 @@
     <div class='recommend'>
       <div class='title'>
         <p>{{ title }}</p>
-        <a class='more' href='#'>查看更多</a>
+        <router-link :to="{name:'article-list'}" v-if="this.type==='news'">
+          查看更多
+        </router-link>
+        <router-link :to="{name:'software'}" v-else>
+          查看更多
+        </router-link>
       </div>
-      <ul class='list-unstyled'>
-        <li>
-          <span>[<a href='#'>智能设备</a>]</span>
-          <a class='link-dark' href='#' title='米家互联网洗烘一体机'>米家互联网洗烘一体机</a>
+      <ul class='list-unstyled' v-if="this.type==='news'">
+        <li v-for='(item,index) in list'>
+          <span>【<router-link :to="{name:'article-list',query: {cate:item.cate}}">{{item.cate}}</router-link>】</span>
+          <router-link :to="{name:'article-info',params:{title:item.title,id:item.id}}">
+            {{item.title}}
+          </router-link>
         </li>
-        <li>
-          <span>[<a href='#'>智能设备</a>]</span>
-          <a class='link-dark' href='#' title='米家无线投影仪青春版'>米家无线投影仪青春版</a>
-        </li>
-        <li>
-          <span>[<a href='#'>智能设备</a>]</span>
-          <a class='link-dark' href='#' title='米家九号平衡车Plus'>米家九号平衡车Plus</a>
-        </li>
-        <li>
-          <span>[<a href='#'>智能设备</a>]</span>
-          <a class='link-dark' href='#' title='智能WIFI无人机'>智能WIFI无人机</a>
-        </li>
-        <li>
-          <span>[<a href='#'>智能家居</a>]</span>
-          <a class='link-dark' href='#' title='智能游戏WIFI无线手柄'>智能游戏WIFI无线手柄</a>
-        </li>
-        <li>
-          <span>[<a href='#'>移动设备</a>]</span>
-          <a class='link-dark' href='#' title='高保真无绳WIFI耳机'>高保真无绳WIFI耳机</a>
-        </li>
-        <li>
-          <span>[<a href='#'>网络工具</a>]</span>
-          <a class='link-dark' href='#' title='Royal TSX 1.4.6 好用的多终端工具'>Royal TSX 1.4.6 好用的多终端工具</a>
-        </li>
-        <li>
-          <span>[<a href='#'>网络工具</a>]</span>
-          <a class='link-dark' href='#' title='vSSH 1.11.1 强大的多标签ssh工具'>vSSH 1.11.1 强大的多标签ssh工具</a>
-        </li>
-        <li>
-          <span>[<a href='#'>网络工具</a>]</span>
-          <a class='link-dark' href='#' title='vSSH 1.11.1 强大的多标签ssh工具'>vSSH 1.11.1 强大的多标签ssh工具</a>
-        </li>
-        <li>
-          <span>[<a href='#'>网络工具</a>]</span>
-          <a class='link-dark' href='#' title='vSSH 1.11.1 强大的多标签ssh工具'>vSSH 1.11.1 强大的多标签ssh工具</a>
+      </ul>
+      <ul class='list-unstyled' v-else>
+        <li v-for='(item,index) in list'>
+          <span>【<router-link :to="{name:'software',query: {cate:item.cate}}">{{item.cate}}</router-link>】</span>
+          <router-link :to="{name:'software-info',params:{title:item.title,id:item.id}}">
+            {{item.title}}
+          </router-link>
         </li>
       </ul>
     </div>
@@ -58,6 +37,7 @@ export default {
   data() {
     return {
       title: '',
+      list:{}
     }
   },
   mounted() {
@@ -65,11 +45,26 @@ export default {
   },
   methods: {
     loadRecommand() {
+      var t = 0;
       if (this.type === 'news') {
         this.title = '最新推荐'
+        t = 1999;
       } else if (this.type === 'download') {
         this.title = '下载榜单'
+        t = 2001
       }
+      let params = {
+        type:t
+      }
+      this.$api.article.recommendList(params).then(res=>{
+        if(res.data.code) {
+          this.list = res.data.data.list.data;
+        }else{
+          this.$notify.error(res.data.msg);
+        }
+      }).catch(err => {
+        this.$notify.error('网络错误！');
+      })
     },
   },
   created() {
@@ -99,12 +94,12 @@ export default {
       width: 50%;
     }
 
-    .more {
+    a {
       font-size: 10px;
       display: inline-block;
     }
 
-    .more:hover {
+    a:hover {
       color: #4e81f6;
     }
   }

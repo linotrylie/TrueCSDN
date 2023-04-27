@@ -1,7 +1,7 @@
 <template>
   <div class='article'>
     <div class='tag'>
-      <el-tabs v-model='ActiveName' type='border-card' @tab-click='handleClick'>
+      <el-tabs v-model='ActiveName' @tab-click='handleClick' tab-position='bottom'>
         <el-tab-pane v-for='item in Tabitems' :label='item.name' :name='item.name' :key='item.id'>
         </el-tab-pane>
       </el-tabs>
@@ -129,6 +129,7 @@ export default {
       this.loadArticle();
     },
     loadArticle() {
+      console.log(this.ActiveName);
       let params = {
         cate_name:this.ActiveName,
         radio:this.radio,
@@ -139,7 +140,6 @@ export default {
         if(res.data !== "" && res.data.code) {
           this.ArticleList = res.data.data.data
           this.totalCount = res.data.data.total
-          console.log(this.totalCount)
         }else{
           this.$notify.error(res.data.msg);
         }
@@ -156,7 +156,7 @@ export default {
       this.$api.article.tagList().then(res=>{
         if(res.data.code) {
           this.Tabitems = res.data.data;
-          this.ActiveName = this.Tabitems[0].name
+          // this.ActiveName = this.Tabitems[0].name
         }else{
           this.$notify.error(res.data.msg);
         }
@@ -205,6 +205,7 @@ export default {
     },
   },
   created() {
+    this.ActiveName = this.$route.query.cate
     this.loadTag();
     this.loadArticle();
   },
@@ -212,7 +213,6 @@ export default {
 
   },
   mounted() {
-
   }
 }
 </script>
@@ -235,19 +235,20 @@ export default {
 
   .tag {
     width: 100%;
-
     .el-tabs {
+      background: #fff;
       width: 100%;
-
       ::v-deep .el-tabs__content {
         padding: 0 !important;
       }
+      ::v-deep .el-tabs__header {
+        margin-top: 0 !important;
+      }
     }
-
     .filter {
       width: 100%;
       height: auto;
-      margin-top: 5px;
+      //margin-top: 5px;
     }
   }
 

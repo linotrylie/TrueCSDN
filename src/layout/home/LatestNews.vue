@@ -3,7 +3,7 @@
     <div class='latest-news-content-title'>最热文章</div>
     <ul class='list-unstyled'>
       <li v-for='(item,index) in list'>
-        <span>[<a href='#'>{{item.cate}}</a>]</span>
+        <span>【<router-link :to="{name:'article-list',query: {cate:item.cate}}">{{item.cate}}</router-link>】</span>
         <router-link :to="{name:'article-info',params:{title:item.title,id:item.id}}">
           {{item.title}}
         </router-link>

@@ -296,7 +296,7 @@ export default {
       width: 450px;
       height: auto;
       margin: 0 auto;
-      box-shadow: 2px 2px 2px #8a93a0;
+      box-shadow: 2px 2px 2px #689fea;
       display: flex;
       border-radius: 15px;
 
@@ -305,11 +305,9 @@ export default {
     .logup {
       position: fixed;
       left: 40%;
-
       .el-form-item {
         margin-top: 35px;
       }
-
       .el-form-item:last-child {
         margin-top: 105px;
       }
@@ -318,11 +316,9 @@ export default {
     .login {
       position: fixed;
       left: 40%;
-
       .el-form-item {
         margin-top: 35px;
       }
-
       .el-form-item:last-child {
         margin-top: 180px;
       }
