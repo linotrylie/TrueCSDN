@@ -43,7 +43,7 @@
         <Comment
           v-model='data'
           :before-delete='deleteComment'
-          :before-like='like'
+          :before-like='handlelike'
           :before-submit='submit'
           :props='commentData'
           :upload-img='uploadImg'
@@ -127,8 +127,8 @@ export default {
     }
   },
   mounted() {
-    // const header = this.$refs.header
-    // this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
+    const header = this.$refs.header
+    this.wrapStyle = `height: calc(100vh - ${header.clientHeight + 20}px)`
   },
   methods: {
     LoadCurrentUser(author){
@@ -215,7 +215,7 @@ export default {
       })
       add(Object.assign(res.newComment, { _id: id }))
     },
-    async like(comment) {
+    async handlelike(comment) {
       const res = await new Promise((resolve) => {
         setTimeout(() => {
           resolve(comment)
@@ -397,6 +397,7 @@ export default {
     height: auto;
     margin: 0 10px 10px 300px;
     background: #fff;
+    padding-bottom: 10px;
   }
 }
 

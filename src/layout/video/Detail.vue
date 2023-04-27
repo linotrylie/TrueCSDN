@@ -370,6 +370,7 @@ export default {
         height: auto;
         margin-top: 10px;
         background: #fff;
+        padding-bottom: 10px;
       }
     }
   }

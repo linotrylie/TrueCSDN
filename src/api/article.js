@@ -14,7 +14,12 @@ const article = {
   tagList() {
     return instance.get(`${base.t}/tag/list`);
   },
-
+  bannerList() {
+    return instance.get(`${base.t}/banner/list`);
+  },
+  hotList(params) {
+    return instance.get(`${base.t}/hot/list`,qs.stringify(params));
+  },
 }
 
 export default article;

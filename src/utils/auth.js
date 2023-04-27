@@ -44,3 +44,8 @@ export function delUser() {
   removeToken('id');
   return true
 }
+
+export function checkLogin()
+{
+  return getToken() === undefined;
+}

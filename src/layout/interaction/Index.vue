@@ -79,6 +79,7 @@
 <script>
 import { CONSTANT } from '@/config/constant.js'
 import { Notification } from 'element-ui'
+import { checkLogin } from '@/utils/auth.js'
 
 export default {
   name: 'Interaction',
@@ -118,6 +119,10 @@ export default {
       this.dialogFormVisible = false
     },
     handleInteraction(val, num) {
+      if(checkLogin()){
+        this.$router.push('/login');
+        return;
+      }
       let params = {
         id: this.id,
         type: val,

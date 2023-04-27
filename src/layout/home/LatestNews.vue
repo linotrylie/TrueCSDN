@@ -2,42 +2,11 @@
   <div class='latest-news-content'>
     <div class='latest-news-content-title'>最热文章</div>
     <ul class='list-unstyled'>
-      <li>
-        <span>[<a href='#'>智能设备</a>]</span>
-        <a class='link-dark' href='#' title='米家互联网洗烘一体机'>米家互联网洗烘一体机</a>
-      </li>
-      <li>
-        <span>[<a href='#'>智能设备</a>]</span>
-        <a class='link-dark' href='#' title='米家无线投影仪青春版'>米家无线投影仪青春版</a>
-      </li>
-      <li>
-        <span>[<a href='#'>智能设备</a>]</span>
-        <a class='link-dark' href='#' title='米家九号平衡车Plus'>米家九号平衡车Plus</a>
-      </li>
-      <li>
-        <span>[<a href='#'>智能设备</a>]</span>
-        <a class='link-dark' href='#' title='智能WIFI无人机'>智能WIFI无人机</a>
-      </li>
-      <li>
-        <span>[<a href='#'>智能家居</a>]</span>
-        <a class='link-dark' href='#' title='智能游戏WIFI无线手柄'>智能游戏WIFI无线手柄</a>
-      </li>
-      <li>
-        <span>[<a href='#'>移动设备</a>]</span>
-        <a class='link-dark' href='#' title='高保真无绳WIFI耳机'>高保真无绳WIFI耳机</a>
-      </li>
-      <li>
-        <span>[<a href='#'>网络工具</a>]</span>
-        <a class='link-dark' href='#' title='Royal TSX 1.4.6 好用的多终端工具'>Royal TSX 1.4.6
-          好用的多终端工具23412412341234123412341234341234</a>
-      </li>
-      <li>
-        <span>[<a href='#'>网络工具</a>]</span>
-        <a class='link-dark' href='#' title='vSSH 1.11.1 强大的多标签ssh工具'>vSSH 1.11.1 强大的多标签ssh工具</a>
-      </li>
-      <li>
-        <span>[<a href='#'>移动设备</a>]</span>
-        <a class='link-dark' href='#' title='高保真无绳WIFI耳机'>高保真无绳WIFI耳机</a>
+      <li v-for='(item,index) in list'>
+        <span>[<a href='#'>{{item.cate}}</a>]</span>
+        <router-link :to="{name:'article-info',params:{title:item.title,id:item.id}}">
+          {{item.title}}
+        </router-link>
       </li>
     </ul>
   </div>
@@ -46,6 +15,28 @@
 <script>
 export default {
   name: 'LatestNews',
+  data() {
+    return {
+      list:{}
+    }
+  },
+  methods:{
+    loadHotList() {
+      this.$api.article.hotList().then(res=>{
+        if(res.data.code) {
+          this.list = res.data.data.list.data;
+          console.log(this.list,res.data)
+        }else{
+          this.$notify.error(res.data.msg);
+        }
+      }).catch(err => {
+        this.$notify.error('网络错误！');
+      })
+    }
+  },
+  created() {
+    this.loadHotList()
+  }
 }
 </script>
 
@@ -76,7 +67,7 @@ export default {
     }
 
     li:last-child {
-      margin-bottom: 0;
+      margin-bottom: 10px;
     }
 
     li a:hover {
