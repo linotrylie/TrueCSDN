@@ -8,7 +8,7 @@
         </div>
 
         <ul>
-          <li v-for='item of toc' :key='item.id' :style="{ 'padding-left': item.tag - maxTitle + 'em' }"
+          <li v-for='(item,index) of toc' :key="index + 'a'" :style="{ 'padding-left': item.tag - maxTitle + 'em' }"
               @click='toTarget(item.id)' v-html='item.text'>
           </li>
         </ul>
@@ -109,7 +109,7 @@ try {
                 * {
                     box-sizing: border-box;
                 }
-                
+
                 #demo-run {
                     padding:20px;
                     background-color:white;
@@ -125,7 +125,7 @@ try {
                     font-size: 85%;
                     font-family: "Operator Mono SSm A","Operator Mono SSm B","Operator Mono","Source Code Pro",Menlo,Consolas,Monaco,monospace;
                     line-height: 1.4;
-                    background-color:#fefefe; 
+                    background-color:#fefefe;
                 }
                 #demo-code code{
                     display: block;
@@ -279,38 +279,6 @@ export default {
     this.translateMarkdown()
   },
   methods: {
-    // LoadArticle() {
-    //   let url = 'https://www.code-nav.cn/api/post/list/page/vo'
-    //   let postData = {
-    //     current: 1,
-    //     reviewStatus: 1,
-    //     sortField: 'createTime',
-    //     sortOrder: 'descend',
-    //   }
-    //   Post(url, postData).then(res => {
-    //     this.initialValue = res.data.records[5].content
-    //   }).catch(err => {
-    //     console.log(err)
-    //     this.$message({
-    //       message: '警告哦，这是一条警告消息',
-    //       type: 'warning',
-    //     })
-    //   })
-    // },
-    share(val) {
-      let message = val;
-      this.$copyText(message).then(function(e){
-        Notification.success({
-          title: '复制成功，快去分享吧',
-          message: '复制成功，快去分享吧',
-        })
-      }).catch( err => {
-        Notification.error({
-          title: '浏览器不支持该功能',
-          message: '请使用最新浏览器',
-        })
-      });
-    },
     translateMarkdown() {
       let that = this
       let DEMO_UID = 0
@@ -376,7 +344,6 @@ export default {
         ...this.markedOptions,
       })
       this.html = html
-      // this.addCopyListener();
       if (this.imgView) {
         const b = /<img([\s]+|[\s]+[^<>]+[\s]+)src=(\"([^<>"\']*)\"|\'([^<>"\']*)\')[^<>]*>/gi
         const s = html.match(b)
@@ -422,11 +389,11 @@ export default {
   },
   watch: {
     initialValue() {
+      this.toc = [];
       this.translateMarkdown()
     },
   },
   created() {
-    // this.LoadArticle()
   },
   destroyed() {
     window.removeEventListener('scroll', this.scroll, false)

@@ -38,7 +38,7 @@
         <el-col :span='4'>
           <div class='avatar-nav'>
 
-            <router-link to='/login' v-if='isLogin'>
+            <router-link to='/login' v-if='!isLogin'>
               <el-avatar :size='50' :src="getAvatar()"></el-avatar>
             </router-link>
 
@@ -74,7 +74,7 @@ export default {
       keyword: '',
       userSrc: '',
       menus: [],
-      isLogin: false,
+      isLogin: this.$login,
       userid: 0
     }
   },
@@ -85,7 +85,6 @@ export default {
       if(getToken('id') !== undefined) {
         this.userid = getToken('id');
       }
-
     },
     getAvatar() {
       if(getToken('avatar') !== undefined)
@@ -112,6 +111,7 @@ export default {
         }
         delUser();
         removeToken();
+        this.$global.setIsLogin(true);
         this.$message.success('登出成功！');
         setTimeout(() => {
           this.$router.go(0);
@@ -128,13 +128,17 @@ export default {
   created() {
     this.menus = [...this.$router.options.routes]
     this.handleUser();
-    console.log(this.userid);
   },
   computed:{
 
   },
   watch:{
-
+    $route:function(to,from) {
+      if(to.path !== from.path) {
+        this.isLogin = this.$global.isLogin
+        this.$forceUpdate();
+      }
+    },
   }
 }
 </script>

@@ -15,6 +15,9 @@ import qs from 'qs'; // 根据需求是否导入qs模块
    },
    postInteraction(params) {
      return instance.post(`${base.t}/vod/interaction`,qs.stringify(params));
+   },
+   postFollow(params) {
+     return instance.post(`${base.t}/follow`,qs.stringify(params));
    }
 }
 export default interaction

@@ -8,6 +8,7 @@
       <div class='filter'>
         <span>筛选：</span>
         <el-radio-group v-model="radio" @change='changeRadio'>
+          <el-radio :label="1">热度</el-radio>
           <el-radio :label="3">点赞数</el-radio>
           <el-radio :label="6">收藏数</el-radio>
           <el-radio :label="9">评论数</el-radio>
@@ -111,9 +112,7 @@ export default {
       ActiveName: '全部',
       ArticleList:[],
       PerPage:[],
-      src: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-      src1: '1',
-      radio:0,
+      radio:1,
       is_like:false,
       is_collect:false,
       // 默认显示第一页
@@ -129,7 +128,6 @@ export default {
       this.loadArticle();
     },
     loadArticle() {
-      console.log(this.ActiveName);
       let params = {
         cate_name:this.ActiveName,
         radio:this.radio,
@@ -156,7 +154,6 @@ export default {
       this.$api.article.tagList().then(res=>{
         if(res.data.code) {
           this.Tabitems = res.data.data;
-          // this.ActiveName = this.Tabitems[0].name
         }else{
           this.$notify.error(res.data.msg);
         }
@@ -205,15 +202,11 @@ export default {
     },
   },
   created() {
-    this.ActiveName = this.$route.query.cate
+    this.ActiveName = this.$route.query.cate==0 ? this.$route.query.cate : '全部'
+    this.currentPage = this.$route.query.page > 1 ? this.$route.query.page : 1
     this.loadTag();
     this.loadArticle();
   },
-  beforeCreate() {
-
-  },
-  mounted() {
-  }
 }
 </script>
 

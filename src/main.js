@@ -17,10 +17,12 @@ import api from './api' // 导入api接口
 import 'virtual:svg-icons-register'
 
 import SvgIcon from '@/assets/icons/svg-icon.vue'
+import global from '@/utils/global.js'
 
 Vue.component('svg-icon', SvgIcon)
 Vue.prototype.$cookies = cookies
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
+Vue.prototype.$global = global; // 将api挂载到vue的原型上
 // 高亮语法
 Vue.config.productionTip = false // 设置为 false 以阻止 Vue 在启动时生成生产提示
 Vue.directive('highlight', function(el) {

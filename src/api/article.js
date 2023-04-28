@@ -5,7 +5,7 @@ import qs from 'qs'; // 根据需求是否导入qs模块
 const article = {
   // 新闻列表
   articleList (params) {
-    return instance.post(`${base.t}/vod/list`,qs.stringify(params));
+    return instance.get(`${base.t}/vod/list?page=${params.page}&per_page=${params.per_page}&radio=${params.radio}&cate_name=${params.cate_name}`);
   },
   // 新闻详情,演示
   async articleDetail (params) {
@@ -22,6 +22,9 @@ const article = {
   },
   async recommendList(params) {
     return instance.post(`${base.t}/recommend/list`,qs.stringify(params));
+  },
+  async vodCollection(params) {
+    return instance.post(`${base.t}/vod/collection`,qs.stringify(params));
   }
 }
 

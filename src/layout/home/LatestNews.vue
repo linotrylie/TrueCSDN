@@ -25,7 +25,6 @@ export default {
       this.$api.article.hotList().then(res=>{
         if(res.data.code) {
           this.list = res.data.data.list.data;
-          console.log(this.list,res.data)
         }else{
           this.$notify.error(res.data.msg);
         }

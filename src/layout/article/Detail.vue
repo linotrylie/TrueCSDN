@@ -11,7 +11,7 @@
               <p>
                 <router-link to='/home'>{{author.nickname}}</router-link>
               </p>
-              <el-tag v-for='(item,index) in tags' :key='index' :color='item.color' :type='item.type'>{{ item.name }}
+              <el-tag v-for='(item,index) in tags' :key="index + 'a'" :color='item.color' :type='item.type'>{{ item.name }}
               </el-tag>
             </div>
             <div class='article-info'>
@@ -53,7 +53,8 @@
     </div>
     <div class='left-content'>
       <Download v-show='downloadList.length > 0' :downloadList='downloadList'></Download>
-      <Recommend type='news'></Recommend>
+      <Recommend type='collection' :vid='this.$route.params.id'></Recommend>
+      <Recommend type='news' ></Recommend>
       <Recommend type='download'></Recommend>
       <Ad></Ad>
     </div>
@@ -73,14 +74,15 @@ import { getToken} from '@/utils/auth.js'
 export default {
   name: 'Detail',
   components: {
+    mymarked,
     Interaction,
     Download,
     Comment,
     Recommend,
     Ad,
-    mymarked,
   },
-  props: ['id'],
+  props: {
+  },
   data() {
     const users = {
       name: '',
@@ -89,6 +91,7 @@ export default {
       commentId:0
     }
     return {
+      vid:0,
       tags: [
         { name: 'V5', type: 'success', color: '#fff' },
         { name: '会员', type: 'success', color: '#fff' },
@@ -137,13 +140,12 @@ export default {
           userId:getToken('id'),
           author: author.id === getToken('id')
         }
-        console.log(author.id,getToken('id'),this.currentUser)
       }
     },
     LoadArticle() {
       this.ArticleData = {}
       let params = {
-        id:this.$route.params.id
+        id:this.vid
       }
       this.$api.article.articleDetail(params).then(res => {
         if(res.data !== "" && res.data.code) {
@@ -189,7 +191,7 @@ export default {
         let param = {
           userId:getToken('id'),
           imgSrc:newComment.imgSrc,
-          vodId:this.$route.params.id,
+          vodId:this.vid,
           liked:0,
           likes:0,
           content: newComment.content,
@@ -259,7 +261,7 @@ export default {
     },
     addData() {
       let params = {
-        vid:this.$route.params.id,
+        vid:this.vid,
       }
       this.$api.interaction.getCommentList(params).then(res => {
         if (res.data.code === 0) {
@@ -268,7 +270,6 @@ export default {
         }
         this.data = res.data.data.list;
       }).catch(err => {
-        console.log(err)
         this.$notify.error('网络错误！');
       })
     },
@@ -289,14 +290,37 @@ export default {
     },
     changeFollow(IsFollow) {
       this.IsFollow = !IsFollow;
+      let params = {
+        star_id:this.author.id,
+        follower_id:this.currentUser.userId,
+        is_follow:this.IsFollow
+      }
+      this.$api.interaction.postFollow(params).then(res=>{
+        if (res.data.code === 0) {
+          this.$notify.error(res.data.msg);
+        }
+      }).catch(error => {
+        this.$notify.error('网络错误！');
+      })
     }
   },
   created() {
+    this.vid = this.$route.params.id
     this.addData()
     this.LoadCurrentUser(this.author);
     this.LoadArticle();
   },
   computed: {},
+  watch:{
+    $route:function(to,from) {
+      if(to.path !== from.path) {
+        this.vid = this.$route.params.id
+        this.addData()
+        this.LoadCurrentUser(this.author);
+        this.LoadArticle();
+      }
+    },
+  }
 }
 </script>
 

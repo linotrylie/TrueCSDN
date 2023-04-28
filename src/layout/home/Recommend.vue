@@ -1,14 +1,17 @@
 <template>
-  <div>
-    <div class='recommend'>
+  <div v-show='list.length > 0'>
+    <div class='recommend' >
       <div class='title'>
         <p>{{ title }}</p>
         <router-link :to="{name:'article-list'}" v-if="this.type==='news'">
           查看更多
         </router-link>
-        <router-link :to="{name:'software'}" v-else>
+        <router-link :to="{name:'software'}" v-else-if="this.type==='download'">
           查看更多
         </router-link>
+        <a href='#' v-else>
+          {{user.nickname}}
+        </a>
       </div>
       <ul class='list-unstyled' v-if="this.type==='news'">
         <li v-for='(item,index) in list'>
@@ -18,12 +21,26 @@
           </router-link>
         </li>
       </ul>
-      <ul class='list-unstyled' v-else>
+      <ul class='list-unstyled' v-else-if="this.type==='download'">
         <li v-for='(item,index) in list'>
           <span>【<router-link :to="{name:'software',query: {cate:item.cate}}">{{item.cate}}</router-link>】</span>
           <router-link :to="{name:'software-info',params:{title:item.title,id:item.id}}">
             {{item.title}}
           </router-link>
+        </li>
+      </ul>
+      <ul class='list-unstyled' v-else>
+        <li v-for='(item,index) in list' >
+          <p class='current-item' v-if='item.id == vid'>
+          <router-link :to="{name:'article-info',params:{title:item.title,id:item.id}}">
+            {{item.title}}
+          </router-link>
+          </p>
+          <p v-else>
+          <router-link :to="{name:'article-info',params:{title:item.title,id:item.id}}">
+            {{item.title}}
+          </router-link>
+          </p>
         </li>
       </ul>
     </div>
@@ -32,12 +49,23 @@
 
 <script>
 export default {
-  props: ['type'],
+  props: {
+    type:{
+      type: String,
+      default: () => [],
+      required: true,
+    },
+    vid:{
+      // type: String || Number,
+      required: false,
+    }
+  },
   name: 'Recommend',
   data() {
     return {
       title: '',
-      list:{}
+      list:{},
+      user:{}
     }
   },
   mounted() {
@@ -52,6 +80,8 @@ export default {
       } else if (this.type === 'download') {
         this.title = '下载榜单'
         t = 2001
+      }else {
+
       }
       let params = {
         type:t
@@ -66,10 +96,32 @@ export default {
         this.$notify.error('网络错误！');
       })
     },
+    loadVodCollection() {
+      let params = {
+        vid:this.vid
+      }
+      this.$api.article.vodCollection(params).then(res=>{
+        if(res.data.code) {
+          this.list = res.data.data.list;
+          this.title += res.data.data.title;
+          this.user = res.data.data.user
+        }
+      }).catch(err => {
+        this.$notify.error('网络错误！');
+      })
+    }
   },
   created() {
-    this.loadRecommand()
+    if (this.type === 'collection' ) {
+      this.title = '合集：'
+      this.loadVodCollection()
+    }else{
+      this.loadRecommand()
+    }
   },
+  watch:{
+
+  }
 }
 </script>
 
@@ -89,11 +141,9 @@ export default {
     margin-bottom: 5px;
     display: flex;
     justify-content: space-around;
-
     p {
       width: 50%;
     }
-
     a {
       font-size: 10px;
       display: inline-block;
@@ -114,6 +164,9 @@ export default {
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 1;
       margin-bottom: 6px;
+      .current-item {
+        background: #b5c7ec;
+      }
     }
 
     li:last-child {

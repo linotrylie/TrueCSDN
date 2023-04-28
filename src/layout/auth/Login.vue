@@ -207,6 +207,7 @@ export default {
             setUser(res.data.data.user);
             let token = res.data.data.jwt.token_type+" "+res.data.data.jwt.access_token
             setToken('access_token',token)
+            this.$global.setIsLogin(true);
             this.$message.success('登录成功！');
             setTimeout(() => {
               this.$router.go(-1);
