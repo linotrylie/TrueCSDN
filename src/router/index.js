@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/layout/home/home.vue'
-import Login from '@/layout/auth/Login.vue'
-import PostList from '@/layout/article/List.vue'
-import Video from '@/layout/video/Detail.vue'
-import VideoList from '@/layout/video/Index.vue'
-import SoftwareList from '@/layout/software/Index.vue'
 
-import ArticleDetail from '@/layout/article/Detail.vue'
 Vue.use(VueRouter)
+
+const Login = r => require.ensure([], () => r(require('@/layout/auth/Login.vue')), 'Login');
+const Home = r => require.ensure([], () => r(require('@/layout/home/home.vue')), 'Home');
+const PostList = r => require.ensure([], () => r(require('@/layout/article/List.vue')), 'PostList');
+const Video = r => require.ensure([], () => r(require('@/layout/video/Detail.vue')), 'Video');
+const VideoList = r => require.ensure([], () => r(require('@/layout/video/Index.vue')), 'VideoList');
+const SoftwareList = r => require.ensure([], () => r(require('@/layout/software/Index.vue')), 'SoftwareList');
+const ArticleDetail = r => require.ensure([], () => r(require('@/layout/article/Detail.vue')), 'ArticleDetail');
+
+
 
 const routes = [
   {
@@ -17,7 +20,7 @@ const routes = [
     isHidden:false,
     name:'home',
     menu:'首页',
-    component: Home,
+    component: ()=>import('@/layout/home/home.vue'),
   },
   {
     path: '/article/:title/:id',
@@ -25,7 +28,7 @@ const routes = [
     isHidden:true,
     name:'article-info',
     menu:'文章详情',
-    component: ArticleDetail,
+    component:()=>import('@/layout/article/Detail.vue'),
   },
   {
     path: '/login',
@@ -33,7 +36,7 @@ const routes = [
     isHidden:true,
     name:'login',
     menu:'登录',
-    component: Login,
+    component: ()=>import('@/layout/auth/Login.vue'),
   },
   {
     path: '/post',
@@ -41,7 +44,7 @@ const routes = [
     isHidden:false,
     name:'article-list',
     menu:'文章',
-    component: PostList,
+    component: ()=>import('@/layout/article/List.vue'),
   },
   {
     path: '/user-center/:id',
@@ -49,7 +52,7 @@ const routes = [
     isHidden:true,
     name:'user-center',
     menu:'用户中心',
-    component: Login,
+    component: ()=>import('@/layout/home/home.vue'),
   },
   {
     path: '/video/:title/:id',
@@ -57,7 +60,7 @@ const routes = [
     isHidden:true,
     name:'video-info',
     menu:'视频详情',
-    component: Video,
+    component: ()=>import('@/layout/video/Detail.vue'),
   },
   {
     path: '/video',
@@ -65,7 +68,7 @@ const routes = [
     isHidden:false,
     name:'video',
     menu:'视频',
-    component: VideoList,
+    component: ()=>import('@/layout/video/Index.vue'),
   },
   {
     path: '/software',
@@ -73,7 +76,7 @@ const routes = [
     isHidden:false,
     name:'software',
     menu:'软件工具',
-    component: SoftwareList,
+    component: ()=>import('@/layout/software/Index.vue'),
   },
   {
     path: '/software/:title/:id',
@@ -81,7 +84,7 @@ const routes = [
     isHidden:true,
     name:'software-info',
     menu:'软件详情',
-    component: ArticleDetail,
+    component: ()=>import('@/layout/article/Detail.vue'),
   },
 ]
 

@@ -151,7 +151,8 @@ export default {
       },
     ]
     return {
-      videoSrc: 'https://yleen.cc/files/videos/摇曳露营01.mp4',
+      // videoSrc: 'https://yleen.cc/files/videos/摇曳露营01.mp4',
+      videoSrc: 'https://s.xlzys.com/play/9aAnpqpb/index.m3u8',
       barrageXml: '',
       data: [],
       commentData: {

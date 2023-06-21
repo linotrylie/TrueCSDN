@@ -297,9 +297,11 @@ export default {
       }
       this.$api.interaction.postFollow(params).then(res=>{
         if (res.data.code === 0) {
-          this.$notify.error(res.data.msg);
+          this.IsFollow = !IsFollow;
+          this.$notify.error("请先登录！");
         }
       }).catch(error => {
+        this.IsFollow = !IsFollow;
         this.$notify.error('网络错误！');
       })
     }
